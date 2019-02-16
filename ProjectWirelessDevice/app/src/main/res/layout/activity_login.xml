@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welcome to CoClass!!"
+            android:textSize="20dp"
+            android:textAlignment="center"/>
+
+        <ImageView
+            android:id="@+id/pic"
+            android:src="@mipmap/ic_launcher_round"
+            android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:layout_marginTop="50dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:padding="20dp"/>
+
+        <EditText
+            android:id="@+id/user"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pic"
+            android:layout_marginTop="20dp"
+            android:hint="User"
+            android:singleLine="true"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user"
+            android:layout_marginTop="10dp"
+            android:hint="Password"
+            android:singleLine="true"
+            android:inputType="textPassword"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="200dp"
+            android:text="login"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/password"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/askTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Don't have an account?"
+            android:textAlignment="center"
+            android:layout_below="@+id/login"/>
+        <TextView
+            android:id="@+id/register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Sign up"
+            android:textColor="@color/colorPrimary"
+            android:clickable="true"
+            android:layout_below="@+id/askTxt"/>
+    </LinearLayout>
+
+</ScrollView>
