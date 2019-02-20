@@ -11,7 +11,7 @@
     android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:text="@string/registration"
             android:textSize="36sp"
             android:paddingLeft="@dimen/sixTeen"/>
@@ -90,8 +90,25 @@
                 android:layout_weight="4"
                 android:inputType="textPassword"/>
         </LinearLayout>
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginVertical="16dp">
+            <RadioButton
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/student"
+                android:gravity="center"/>
+            <RadioButton
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/teacher"
+                android:gravity="center"/>
+        </RadioGroup>
         <Button
-            android:id="@+id/signup"
+            android:id="@+id/signUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
