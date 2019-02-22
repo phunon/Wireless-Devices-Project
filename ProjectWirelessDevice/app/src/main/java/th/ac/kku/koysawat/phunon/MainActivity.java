@@ -16,26 +16,25 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FirebaseAuth auth;
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseUser FireUser = auth.getCurrentUser();
     TextView userTxt;
     Button signout;
-    ProfilePictureView profile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         signout = findViewById(R.id.signout);
         signout.setOnClickListener(this);
         userTxt = findViewById(R.id.userShow);
-        userTxt.setText("User: " + user.getEmail() + "\nUID: " + user.getUid());
-        Profile.getCurrentProfile();
+        userTxt.setText("Username: " + FireUser.getDisplayName() + "\nEmail: " + FireUser.getEmail() + "\nUID: " + FireUser.getUid());
     }
 
     public void signOut() {
-        auth.signOut();
-        LoginManager.getInstance().logOut();
-        finish();
+        auth.getInstance().signOut();
+        LoginManager.getInstance().logOut(); // Facebook Log out
+        this.finish();
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
     }
 
     @Override
