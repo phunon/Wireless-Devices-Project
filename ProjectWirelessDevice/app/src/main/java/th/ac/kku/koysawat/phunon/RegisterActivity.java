@@ -1,9 +1,9 @@
 package th.ac.kku.koysawat.phunon;
 
-<<<<<<< HEAD
-=======
+//<<<<<<< HEAD
+//=======
 import android.os.Bundle;
->>>>>>> 96f594f061424c534590ad5f0ed98ef28c0c395e
+//>>>>>>> 96f594f061424c534590ad5f0ed98ef28c0c395e
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;

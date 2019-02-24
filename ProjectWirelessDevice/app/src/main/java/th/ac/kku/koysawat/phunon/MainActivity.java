@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.ProfilePictureView;
+import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -28,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         signout.setOnClickListener(this);
         userTxt = findViewById(R.id.userShow);
         userTxt.setText("Username: " + FireUser.getDisplayName() + "\nEmail: " + FireUser.getEmail() + "\nUID: " + FireUser.getUid());
+
+        SignInButton signInGoogle = findViewById(R.id.sign_in_button);
+        setGooglePlusButtonText(signInGoogle,"Sign in");
     }
 
     public void signOut() {
@@ -43,6 +47,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (i == R.id.signout) {
             signOut();
             Toast.makeText(MainActivity.this, "Sign out.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    protected void setGooglePlusButtonText(SignInButton signInButton, String buttonText) {
+        // Find the TextView that is inside of the SignInButton and set its text
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View v = signInButton.getChildAt(i);
+
+            if (v instanceof TextView) {
+                TextView tv = (TextView) v;
+                tv.setText(buttonText);
+                return;
+            }
         }
     }
 }
