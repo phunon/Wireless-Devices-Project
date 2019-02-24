@@ -82,6 +82,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .requestIdToken("672584759710-n3715i5jmhsca7mofkl24nej08jfnqhm.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
+
+        SignInButton signInGoogle = findViewById(R.id.sign_in_button);
+        setGooglePlusButtonText(signInGoogle,"Sign in");
     }
     // ActionListener
     private void setListener(){
@@ -237,6 +240,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else if (i == R.id.sign_in_button) {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
+        }
+    }
+
+    protected void setGooglePlusButtonText(SignInButton signInButton, String buttonText) {
+        // Find the TextView that is inside of the SignInButton and set its text
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View v = signInButton.getChildAt(i);
+
+            if (v instanceof TextView) {
+                TextView tv = (TextView) v;
+                tv.setText(buttonText);
+                return;
+            }
         }
     }
 }
