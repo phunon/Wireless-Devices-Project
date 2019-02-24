@@ -1,8 +1,11 @@
 package th.ac.kku.koysawat.phunon;
 
+<<<<<<< HEAD
+=======
+import android.os.Bundle;
+>>>>>>> 96f594f061424c534590ad5f0ed98ef28c0c395e
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +22,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private FirebaseAuth auth;
     EditText email,password;
     Button signup;
-    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +37,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         if (!validateForm()) {
             return;
         }
-
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
