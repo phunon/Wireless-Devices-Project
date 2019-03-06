@@ -42,7 +42,23 @@
                 android:layout_margin="10dp"
                 android:layout_marginTop="100dp"
                 android:text="Sign out" />
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_gravity="fill_horizontal"
+                android:drawSelectorOnTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/signout"
+                >
+            </Spinner>
+            <Button
+                android:id="@+id/trigger"
+                android:text="Trigger Intent"
+                android:onClick="onClickIm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spinner"
+                />
         </LinearLayout>
-
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
