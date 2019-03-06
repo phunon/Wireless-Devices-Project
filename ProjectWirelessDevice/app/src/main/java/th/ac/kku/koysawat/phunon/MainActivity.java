@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
+
     }
 
     public void signOut() {

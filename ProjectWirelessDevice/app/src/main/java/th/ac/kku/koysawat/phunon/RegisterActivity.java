@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
+
     private FirebaseAuth auth;
     EditText email,password;
     Button signup;
