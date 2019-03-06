@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="intents">
+        <item>Open Browser</item>
+        <item>Dial</item>
+        <item>Search on Map</item>
+        <item>Show contacts</item>
+    </string-array>
+</resources>
