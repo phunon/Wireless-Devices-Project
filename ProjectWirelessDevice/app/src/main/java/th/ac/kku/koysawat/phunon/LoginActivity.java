@@ -64,6 +64,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
         }
     }
+    //save username and password
+    @Override
+    protected void  onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("user",user.getText().toString());
+        outState.putString("password",password.getText().toString());
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle saveInstanceState){
+        user.setText(saveInstanceState.getString("user"));
+        password.setText(saveInstanceState.getString("password"));
+    }
 
     // Initialization
     private void init() {
