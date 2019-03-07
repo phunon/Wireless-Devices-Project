@@ -43,11 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         R.array.intents , android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-<<<<<<< HEAD
-=======
-
-
->>>>>>> refs/remotes/origin/master
     }
 
     public void signOut() {
