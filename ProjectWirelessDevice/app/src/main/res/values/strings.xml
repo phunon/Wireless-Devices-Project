@@ -1,17 +1,21 @@
 <resources>
     <string name="app_name">Project Wireless Device</string>
-<!--<<<<<<< HEAD-->
     <string name="registration">Registration</string>
     <string name="student">Student</string>
     <string name="teacher">Teacher</string>
-=======
     <string name="facebook_app_id">376445869577428</string>
     <string name="fb_login_protocol_scheme">fb376445869577428</string>
     <string name="textSignup">Sign up</string>
     <string name="Login">Log in</string>
-    <string name="hintUser">Usernane</string>
+    <string name="hintUser">Email or Username</string>
     <string name="hintPass">Password</string>
     <string name="title">Welcome to CoClass!!"</string>
     <string name="noAcc">Don\'t have an account?</string>
->>>>>>> 96f594f061424c534590ad5f0ed98ef28c0c395e
+    <string name="title_activity_nav">NavActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Username</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 </resources>
