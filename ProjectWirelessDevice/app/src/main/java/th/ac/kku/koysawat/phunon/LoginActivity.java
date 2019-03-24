@@ -36,7 +36,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-
     private ProgressDialog progressDialog;
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser FireUser = auth.getCurrentUser();
@@ -53,6 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
         if (FireUser == null) {
             setProgress();
             setContentView(R.layout.activity_login);
