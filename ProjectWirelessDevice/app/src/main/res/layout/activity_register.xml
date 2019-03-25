@@ -8,95 +8,72 @@
     <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+        android:layout_margin="16dp">
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:text="@string/registration"
             android:textSize="36sp"
-            android:paddingLeft="@dimen/sixTeen"/>
+            android:paddingLeft="@dimen/sixTeen"
+            android:gravity="center"
+            android:layout_weight="1"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="2"
+                android:layout_margin="30dp">
+
+                <EditText
+                    android:id="@+id/userNameEdt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/user"
+                    android:layout_marginBottom="16dp"
+                    android:padding="16dp"/>
+
+                <EditText
+                    android:id="@+id/Email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_email"
+                    android:layout_marginBottom="16dp"
+                    android:padding="16dp"/>
+
+                <EditText
+                    android:id="@+id/Pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_password"
+                    android:inputType="textPassword"
+                    android:layout_marginBottom="16dp"
+                    android:padding="16dp"/>
+
+                <EditText
+                    android:id="@+id/ConPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_re_password"
+                    android:inputType="textPassword"
+                    android:padding="16dp"/>
+            </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
-            <TextView
-                android:id="@+id/userName"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="Username : "/>
-            <EditText
-                android:id="@+id/userNameEdt"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4" />
+            android:gravity="center_horizontal"
+            android:layout_weight="3">
+            <Button
+                android:id="@+id/signUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:padding="16dp"
+                android:text="@string/register" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp">
-            <TextView
-                android:id="@+id/EmailTxt"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="Email : "/>
-            <EditText
-                android:id="@+id/Email"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:hint="a@b.c"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="true"
-            android:padding="10dp">
-            <TextView
-                android:id="@+id/PassText"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="Password : "/>
-            <EditText
-                android:id="@+id/Pass"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:inputType="textPassword"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:baselineAligned="true"
-            android:padding="10dp">
-            <TextView
-                android:id="@+id/ConPassText"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="Confirm Password : "/>
-            <EditText
-                android:id="@+id/ConPass"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:inputType="textPassword"/>
-        </LinearLayout>
-        <Button
-            android:id="@+id/signUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="20dp"
-            android:text="Sign up"/>
     </LinearLayout>
 
 
