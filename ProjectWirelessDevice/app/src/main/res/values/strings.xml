@@ -30,4 +30,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="googleIdToken">672584759710-n3715i5jmhsca7mofkl24nej08jfnqhm.apps.googleusercontent.com</string>
 </resources>

@@ -2,9 +2,9 @@ package th.ac.kku.koysawat.phunon;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         glogin = findViewById(R.id.sign_in_button);
         glogin.setSize(SignInButton.SIZE_WIDE);
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("672584759710-n3715i5jmhsca7mofkl24nej08jfnqhm.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.googleIdToken))
                 .requestEmail()
                 .build();
 

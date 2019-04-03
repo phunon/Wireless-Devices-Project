@@ -2,6 +2,7 @@ package th.ac.kku.koysawat.phunon;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -9,24 +10,24 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.Profile;
 import com.facebook.login.LoginManager;
-import com.facebook.login.widget.ProfilePictureView;
-import com.google.android.gms.common.SignInButton;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,NavigationView.OnNavigationItemSelectedListener {
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Spinner spinner;
     NavigationView navigationView;
     View headerLayout;
-    ImageView imgProfile;
+    CircleImageView imgProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +64,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userTxt.setText("Username: " + FireUser.getDisplayName() + "\nEmail: " + FireUser.getEmail() + "\nUID: " + FireUser.getUid());
         nav_us.setText(FireUser.getDisplayName());
         nav_em.setText(FireUser.getEmail());
-        //imgProfile.getBackground();
+
+        // Image Prodile Update
+        for(UserInfo profile : FireUser.getProviderData()) {
+            String facebookUserId = null;
+            if(FacebookAuthProvider.PROVIDER_ID.equals(profile.getProviderId())) {
+                facebookUserId = profile.getUid();
+                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?type=large";
+                Picasso.with(this).load(photoUrl).into(imgProfile);
+
+            }
+        }
+
         spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter adapter =
                 ArrayAdapter.createFromResource(this ,
