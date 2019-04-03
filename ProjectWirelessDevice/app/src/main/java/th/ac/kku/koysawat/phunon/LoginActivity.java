@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         glogin = findViewById(R.id.sign_in_button);
         glogin.setSize(SignInButton.SIZE_WIDE);
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken(getString(R.string.googleIdToken))
                 .requestEmail()
                 .build();
 

@@ -16,13 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,7 +32,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
-    GoogleApiClient mGoogleApiClient;
     FirebaseUser FireUser = auth.getCurrentUser();
     TextView userTxt,nav_us,nav_em;
     Button signout,trigger;
@@ -42,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     NavigationView navigationView;
     View headerLayout;
     CircleImageView imgProfile;
-    ImageView bgProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,8 +72,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 facebookUserId = profile.getUid();
                 String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?type=large";
                 Picasso.with(this).load(photoUrl).into(imgProfile);
-                photoUrl = "https://graph.facebook.com/" + facebookUserId + "?fields=cover";
-                Picasso.with(this).load(photoUrl).into((bgProfile));
 
             }
         }
@@ -99,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         nav_us = headerLayout.findViewById(R.id.nav_username);
         nav_em = headerLayout.findViewById(R.id.nav_email);
         imgProfile = headerLayout.findViewById(R.id.imageView);
-        bgProfile = headerLayout.findViewById(R.id.bg_profile);
     }
 
     public void signOut() {
