@@ -10,12 +10,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,12 +36,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser FireUser = auth.getCurrentUser();
-    TextView userTxt,nav_us,nav_em;
-    Button signout,trigger;
-    Spinner spinner;
+    TextView nav_us,nav_em;
+    //Button trigger;
+    //Spinner spinner;
     NavigationView navigationView;
     View headerLayout;
     CircleImageView imgProfile;
+    RecyclerView recyclerView;
+    RecyclerView.LayoutManager layoutManager;
+    RecyclerView.Adapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,9 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationView.setNavigationItemSelectedListener(this);
 
         init();
-        signout.setOnClickListener(this);
-        trigger.setOnClickListener(this);
-        userTxt.setText("Username: " + FireUser.getDisplayName() + "\nEmail: " + FireUser.getEmail() + "\nUID: " + FireUser.getUid());
+        //trigger.setOnClickListener(this);
         nav_us.setText(FireUser.getDisplayName());
         nav_em.setText(FireUser.getEmail());
 
@@ -76,23 +81,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        spinner = (Spinner) findViewById(R.id.spinner);
+        /*spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter adapter =
                 ArrayAdapter.createFromResource(this ,
                         R.array.intents , android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        spinner.setAdapter(adapter);*/
 
     }
 
     public void init(){
-        signout = findViewById(R.id.signout);
-        userTxt = findViewById(R.id.userShow);
-        trigger = findViewById(R.id.trigger);
+        //trigger = findViewById(R.id.trigger);
         headerLayout = navigationView.getHeaderView(0);
         nav_us = headerLayout.findViewById(R.id.nav_username);
         nav_em = headerLayout.findViewById(R.id.nav_email);
         imgProfile = headerLayout.findViewById(R.id.imageView);
+        recyclerView =
+                (RecyclerView) findViewById(R.id.recycler_view);
+
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        adapter = new RecyclerAdapter();
+        recyclerView.setAdapter(adapter);
     }
 
     public void signOut() {
@@ -105,13 +116,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.signout) {
-            signOut();
-            Toast.makeText(MainActivity.this, "Sign out.", Toast.LENGTH_SHORT).show();
-        } if (i == R.id.fab) {
-            Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        } if (i == R.id.trigger) {
+        if (i == R.id.fab) {
+            Snackbar.make(v, "Added your class", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+        /*if (i == R.id.trigger) {
             int pos = spinner.getSelectedItemPosition();
             Intent intent = null;
             switch (pos) {
@@ -135,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (intent != null) {
                 startActivity(intent);
             }
-        }
+        }*/
     }
 
     @Override
@@ -153,7 +161,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.signout) {
+            signOut();
+            Toast.makeText(MainActivity.this, "Sign out.", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -194,4 +204,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
