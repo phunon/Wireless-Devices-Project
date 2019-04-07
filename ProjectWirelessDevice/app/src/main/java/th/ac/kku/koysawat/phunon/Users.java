@@ -1,24 +1,25 @@
 package th.ac.kku.koysawat.phunon;
 
 import com.google.firebase.database.IgnoreExtraProperties;
+import java.util.Date;
 
 @IgnoreExtraProperties
 public class Users {
-    public String username;
+
+    public String uid;
     public String name;
     public String email;
-    public String password;
-    public String UID;
+    public String create_at;
 
     public Users() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Users(String username, String name, String email,String password, String UID) {
-        this.name = username;
+    public Users(String uid,String name, String email) {
+        this.uid = uid;
         this.name = name;
         this.email = email;
-        this.password = password;
-        this.UID = UID;
+        this.create_at = new Date().toString();
     }
-}
 
+}
