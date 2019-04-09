@@ -9,57 +9,44 @@
     tools:showIn="@layout/app_bar_nav">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
-
-        <com.facebook.login.widget.ProfilePictureView
-            android:id="@+id/profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        </com.facebook.login.widget.ProfilePictureView>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Login Success!" />
-
-            <TextView
-                android:id="@+id/userShow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/signout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_margin="10dp"
-                android:layout_marginTop="100dp"
-                android:text="Sign out" />
-            <Spinner
+            <!--Spinner
                 android:id="@+id/spinner"
                 android:layout_gravity="fill_horizontal"
                 android:drawSelectorOnTop="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/signout"
-                >
+                android:layout_below="@+id/signout" >
             </Spinner>
             <Button
                 android:id="@+id/trigger"
                 android:text="Trigger Intent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinner"
-                />
+                android:layout_gravity="center"/-->
+            //Implement here!!!
+            <android.support.design.widget.CoordinatorLayout
+                android:id="@+id/main_content"
+                android:fitsSystemWindows="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </android.support.design.widget.CoordinatorLayout>
         </LinearLayout>
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
