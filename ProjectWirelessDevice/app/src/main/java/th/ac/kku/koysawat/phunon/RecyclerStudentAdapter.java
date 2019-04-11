@@ -14,15 +14,15 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class RecyclerStudentAdapter extends RecyclerView.Adapter<RecyclerStudentAdapter.ViewHolder> {
 
 
     Context context;
-    ArrayList<Courses> courses;
+    ArrayList<Student> students;
 
-    public  RecyclerAdapter(Context context, ArrayList<Courses> arrayList) {
+    public RecyclerStudentAdapter(Context context, ArrayList<Student> arrayList) {
         this.context = context;
-        this.courses = arrayList;
+        this.students = arrayList;
     }
 
     @NonNull
@@ -33,13 +33,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.itemTitle.setText(courses.get(i).getName());
-        viewHolder.itemDetail.setText(courses.get(i).getDescription());
+        viewHolder.itemTitle.setText(students.get(i).getName());
     }
 
     @Override
     public int getItemCount() {
-        return courses.size();
+        return students.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
@@ -57,11 +56,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     int position = getAdapterPosition();
-                    Intent intent = new Intent(context, ClassActivity.class);
-                    intent.putExtra("course_id",courses.get(position).getCourse_id());
-                    //((Activity)context).finish();
-                    context.startActivity(intent);
-                    //Snackbar.make(v, "Click detected on item " + position,Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Snackbar.make(v, "Click detected on item " + position, Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
                 }
             });

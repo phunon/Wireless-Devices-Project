@@ -1,33 +1,24 @@
 package th.ac.kku.koysawat.phunon;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,32 +27,33 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,NavigationView.OnNavigationItemSelectedListener {
+public class ClassActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser FireUser = auth.getCurrentUser();
+    FirebaseDatabase database;
     TextView nav_us,nav_em;
     NavigationView navigationView;
     View headerLayout;
     CircleImageView imgProfile;
+    TextView txt;
+    RecyclerStudentAdapter adapter;
     RecyclerView recyclerView;
-    RecyclerAdapter adapter;
-    FirebaseDatabase database;
-    ArrayList<Courses> courses;
-    boolean ftoggle;
+    ArrayList<Student> students;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_class);
 
         // Navigation View
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -75,49 +67,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationView.setNavigationItemSelectedListener(this);
 
         init();
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("Loading...please wait");
-        progressDialog.show();
-        ftoggle = true;
+
         // Card View
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         database = FirebaseDatabase.getInstance();
-        //String uniqueID = UUID.randomUUID().toString();
-        /*Student student = new Student(FireUser.getUid(),FireUser.getDisplayName(),FireUser.getEmail());
-        ArrayList<Student> studentArrayList = new ArrayList<Student>();
-        studentArrayList.add(student);
-        studentArrayList.add(new Student("klfjdlskjflksd","Mister A",null));
-        Courses course = new Courses(uniqueID,"COURSE TEST","test test test test",studentArrayList);*/
-        DatabaseReference myRef = database.getReference().child("Courses");
-        //myRef.child(uniqueID).setValue(course);
+        database = FirebaseDatabase.getInstance();
+        Bundle extras = getIntent().getExtras();
+        String courses_id = extras.getString("course_id");
+        DatabaseReference myRef = database.getReference().child("Courses").child(courses_id).child("student");//.child(uniqueID);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 //String value = dataSnapshot.getValue(String.class);
-
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    Courses course = data.getValue(Courses.class);
-                    courses.add(course);
+                    GenericTypeIndicator<ArrayList<Student>> t = new GenericTypeIndicator<ArrayList<Student>>() {};
+                    students = dataSnapshot.getValue(t);
                 }
-                adapter = new RecyclerAdapter(MainActivity.this,courses);
-                recyclerView.setAdapter(adapter);
-                progressDialog.dismiss();
+                try {
+                    if (students.size() != 0) {
+                        adapter = new RecyclerStudentAdapter(ClassActivity.this, students);
+                        recyclerView.setAdapter(adapter);
+                    } else {
+                        //txt.setText("No student");
+                    }
+                } catch (Exception e) {
+
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value\
-                Log.i("Firebase databsae",error.toString());
+                // Failed to read value
             }
         });
-
-        // Float action bar
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(this);
 
         //trigger.setOnClickListener(this);
         nav_us.setText(FireUser.getDisplayName());
@@ -137,73 +122,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        DatabaseReference myRef = database.getReference("Courses");
-
-    }
-
     public void init(){
         //trigger = findViewById(R.id.trigger);
         headerLayout = navigationView.getHeaderView(0);
         nav_us = headerLayout.findViewById(R.id.nav_username);
         nav_em = headerLayout.findViewById(R.id.nav_email);
         imgProfile = headerLayout.findViewById(R.id.imageView);
+        txt = findViewById(R.id.noneStudent);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        //layoutManager = new LinearLayoutManager(this);
-        //adapter = new RecyclerAdapter();
-        courses = new ArrayList<Courses>();
     }
 
     public void signOut() {
         auth.getInstance().signOut();
         LoginManager.getInstance().logOut(); // Facebook Log out
-        this.finish();
-        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
-
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab_1);
-        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab_2);
-        FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab_3);
-        if (i == R.id.fab) {
-            if(ftoggle){
-                // Animations
-                Animation show_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_show);
-                Animation show_fab_2 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab2_show);
-                Animation show_fab_3 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab3_show);
-                // show
-                fabAnim(fab1,show_fab_1,1.7,0.5,true);
-                fabAnim(fab2,show_fab_2,0,1.7,true);
-                fabAnim(fab3,show_fab_3,-1.7,0.5,true);
-                ftoggle = false;
-            } else {
-                // Animations
-                Animation hide_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_hide);
-                Animation hide_fab_2 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab2_hide);
-                Animation hide_fab_3 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab3_hide);
-                // hide
-                fabAnim(fab1,hide_fab_1,-1.7,-0.5,false);
-                fabAnim(fab2,hide_fab_2,0,-1.7,false);
-                fabAnim(fab3,hide_fab_3,1.7,-0.5,false);
-                ftoggle = true;
-            }
-            //Snackbar.make(v, "Added your class", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-        }
-    }
-
-    public void fabAnim(FloatingActionButton fab,Animation show_fab,double x,double y,boolean b) {
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab.getLayoutParams();
-        layoutParams.rightMargin += (int) (fab.getWidth() * x);
-        layoutParams.bottomMargin += (int) (fab.getHeight() * y);
-        fab.setLayoutParams(layoutParams);
-        fab.startAnimation(show_fab);
-        fab.setClickable(b);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -222,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //noinspection SimplifiableIfStatement
         if (id == R.id.signout) {
             signOut();
-            Toast.makeText(MainActivity.this, "Sign out.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ClassActivity.this, "Sign out.", Toast.LENGTH_SHORT).show();
             return true;
         }
 
@@ -239,7 +174,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -263,5 +197,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }

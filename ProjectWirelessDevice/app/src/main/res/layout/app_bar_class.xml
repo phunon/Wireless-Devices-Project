@@ -20,15 +20,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_nav" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_margin="@dimen/fab_margin"/>
-
-    <include layout="@layout/fab_layout" />
+    <include layout="@layout/content_class" />
 
 </android.support.design.widget.CoordinatorLayout>
