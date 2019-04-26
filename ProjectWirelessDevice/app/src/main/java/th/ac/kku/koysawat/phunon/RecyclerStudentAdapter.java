@@ -28,7 +28,7 @@ public class RecyclerStudentAdapter extends RecyclerView.Adapter<RecyclerStudent
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.card_layout, viewGroup, false));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.card_student_layout, viewGroup, false));
     }
 
     @Override

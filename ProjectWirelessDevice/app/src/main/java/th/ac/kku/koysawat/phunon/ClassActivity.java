@@ -1,6 +1,7 @@
 package th.ac.kku.koysawat.phunon;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,6 +15,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +40,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ClassActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class ClassActivity extends AppCompatActivity implements View.OnClickListener,NavigationView.OnNavigationItemSelectedListener{
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser FireUser = auth.getCurrentUser();
@@ -49,6 +53,8 @@ public class ClassActivity extends AppCompatActivity implements NavigationView.O
     RecyclerStudentAdapter adapter;
     RecyclerView recyclerView;
     ArrayList<Student> students;
+    boolean ftoggle;
+    String courses_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,31 +73,31 @@ public class ClassActivity extends AppCompatActivity implements NavigationView.O
         navigationView.setNavigationItemSelectedListener(this);
 
         init();
-
+        ftoggle = true;
         // Card View
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         database = FirebaseDatabase.getInstance();
         database = FirebaseDatabase.getInstance();
         Bundle extras = getIntent().getExtras();
-        String courses_id = extras.getString("course_id");
-        DatabaseReference myRef = database.getReference().child("Courses").child(courses_id).child("student");//.child(uniqueID);
+        courses_id = extras.getString("course_id");
+        DatabaseReference myRef = database.getReference().child("Courses").child(courses_id).child("student");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 //String value = dataSnapshot.getValue(String.class);
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    GenericTypeIndicator<ArrayList<Student>> t = new GenericTypeIndicator<ArrayList<Student>>() {};
-                    students = dataSnapshot.getValue(t);
-                }
                 try {
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
+                        GenericTypeIndicator<ArrayList<Student>> t = new GenericTypeIndicator<ArrayList<Student>>() {};
+                        students = dataSnapshot.getValue(t);
+                    }
                     if (students.size() != 0) {
                         adapter = new RecyclerStudentAdapter(ClassActivity.this, students);
                         recyclerView.setAdapter(adapter);
                     } else {
-                        //txt.setText("No student");
+                        txt.setText("No student");
                     }
                 } catch (Exception e) {
 
@@ -103,6 +109,10 @@ public class ClassActivity extends AppCompatActivity implements NavigationView.O
                 // Failed to read value
             }
         });
+
+        // Float action bar
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.cfab);
+        fab.setOnClickListener(this);
 
         //trigger.setOnClickListener(this);
         nav_us.setText(FireUser.getDisplayName());
@@ -138,6 +148,61 @@ public class ClassActivity extends AppCompatActivity implements NavigationView.O
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab_1);
+        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab_2);
+        FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab_3);
+        fab1.setOnClickListener(this);
+        fab2.setOnClickListener(this);
+        fab3.setOnClickListener(this);
+        if (i == R.id.cfab) {
+            if(ftoggle){
+                // Animations
+                Animation show_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_show);
+                Animation show_fab_2 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab2_show);
+                Animation show_fab_3 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab3_show);
+                // show
+                fabAnim(fab1,show_fab_1,1.7,0.5,true);
+                fabAnim(fab2,show_fab_2,0,1.7,true);
+                fabAnim(fab3,show_fab_3,-1.7,0.5,true);
+                ftoggle = false;
+            } else {
+                // Animations
+                Animation hide_fab_1 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab1_hide);
+                Animation hide_fab_2 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab2_hide);
+                Animation hide_fab_3 = AnimationUtils.loadAnimation(getApplication(), R.anim.fab3_hide);
+                // hide
+                fabAnim(fab1,hide_fab_1,-1.7,-0.5,false);
+                fabAnim(fab2,hide_fab_2,0,-1.7,false);
+                fabAnim(fab3,hide_fab_3,1.7,-0.5,false);
+                ftoggle = true;
+            }
+            //Snackbar.make(v, "Added your class", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+        if (i == R.id.fab_1) {
+            Intent intent = new Intent(ClassActivity.this, PopAddStudent.class);
+            intent.putExtra("course_id",courses_id);
+            startActivity(intent);
+        }
+        if (i == R.id.fab_2) {
+
+        }
+        if (i == R.id.fab_3) {
+
+        }
+    }
+
+    public void fabAnim(FloatingActionButton fab, Animation show_fab, double x, double y, boolean b) {
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab.getLayoutParams();
+        layoutParams.rightMargin += (int) (fab.getWidth() * x);
+        layoutParams.bottomMargin += (int) (fab.getHeight() * y);
+        fab.setLayoutParams(layoutParams);
+        fab.startAnimation(show_fab);
+        fab.setClickable(b);
     }
 
     @Override

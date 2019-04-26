@@ -22,4 +22,15 @@
 
     <include layout="@layout/content_class" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/cfab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        app:backgroundTint="#00000000"
+        android:foreground="@drawable/edit"
+        android:layout_margin="@dimen/fab_margin"/>
+
+    <include layout="@layout/fab_layout" />
+
 </android.support.design.widget.CoordinatorLayout>

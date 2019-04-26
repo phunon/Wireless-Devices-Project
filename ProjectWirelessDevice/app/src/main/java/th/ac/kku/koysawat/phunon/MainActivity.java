@@ -1,11 +1,5 @@
 package th.ac.kku.koysawat.phunon;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.net.Uri;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +23,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,10 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -94,11 +85,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setHasFixedSize(true);
         database = FirebaseDatabase.getInstance();
         //String uniqueID = UUID.randomUUID().toString();
-        /*Student student = new Student(FireUser.getUid(),FireUser.getDisplayName(),FireUser.getEmail());
-        ArrayList<Student> studentArrayList = new ArrayList<Student>();
-        studentArrayList.add(student);
-        studentArrayList.add(new Student("klfjdlskjflksd","Mister A",null));
-        Courses course = new Courses(uniqueID,"COURSE TEST","test test test test",studentArrayList);*/
+        //Student student = new Student(FireUser.getUid(),FireUser.getDisplayName(),FireUser.getEmail());
+        //Teacher teacher = new Teacher(FireUser.getUid(),FireUser.getDisplayName(),FireUser.getEmail());
+        //ArrayList<Student> studentArrayList = new ArrayList<Student>();
+        //ArrayList<Teacher> teacherArrayList = new ArrayList<Teacher>();
+        //studentArrayList.add(student);
+        //studentArrayList.add(new Student("klfjdlskjflksd","Mister A",null));
+        //teacherArrayList.add(teacher);
+        //Courses course = new Courses(uniqueID,"COURSE TEST","test test test test",studentArrayList,teacherArrayList);
         DatabaseReference myRef = database.getReference().child("Courses");
         //myRef.child(uniqueID).setValue(course);
         myRef.addValueEventListener(new ValueEventListener() {
@@ -121,8 +115,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onCancelled(DatabaseError error) {
                 // Failed to read value\
                 Log.i("Firebase databsae",error.toString());
+                progressDialog.dismiss();
             }
         });
+        // Test Add Database
+        /*DatabaseReference ref = database.getReference().child("Users").child(FireUser.getUid());
+        Users user = new Users(FireUser.getUid(), FireUser.getDisplayName(),FireUser.getEmail());
+        ref.setValue(user);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                //String value = dataSnapshot.getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value\
+                Log.i("Firebase databsae",error.toString());
+            }
+        });*/
+
 
         // Float action bar
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -178,6 +192,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab_1);
         FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab_2);
         FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab_3);
+        fab1.setOnClickListener(this);
+        fab2.setOnClickListener(this);
+        fab3.setOnClickListener(this);
         if (i == R.id.fab) {
             if(ftoggle){
                 // Animations
@@ -201,6 +218,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ftoggle = true;
             }
             //Snackbar.make(v, "Added your class", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+        if (i == R.id.fab_1) {
+            startActivity(new Intent(MainActivity.this, PopAdd.class));
+        }
+        if (i == R.id.fab_2) {
+
+        }
+        if (i == R.id.fab_3) {
+
         }
     }
 

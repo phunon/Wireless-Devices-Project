@@ -10,6 +10,7 @@ public class Courses {
 
     public String course_id;
     public ArrayList<Student> student;
+    public ArrayList<Teacher> teacher;
     public String name;
     public String create_at;
     public String description;
@@ -50,12 +51,13 @@ public class Courses {
         return course_id;
     }
 
-    public Courses(String course_id, String name, String description, ArrayList<Student> student) {
+    public Courses(String course_id, String name, String description, ArrayList<Student> student,ArrayList<Teacher> teacher) {
         this.course_id = course_id;
         this.name = name;
         this.create_at = new Date().toString();
         this.description = description;
         this.student = student;
+        this.teacher = teacher;
     }
 
 }
