@@ -54,15 +54,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             itemTitle = (TextView)itemView.findViewById(R.id.item_title);
             itemDetail = (TextView)itemView.findViewById(R.id.item_detail);
 
-                itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     int position = getAdapterPosition();
                     Intent intent = new Intent(context, ClassActivity.class);
                     intent.putExtra("course_id",courses.get(position).getCourse_id());
                     //((Activity)context).finish();
                     context.startActivity(intent);
                     //Snackbar.make(v, "Click detected on item " + position,Snackbar.LENGTH_LONG).setAction("Action", null).show();
-
                 }
             });
         }

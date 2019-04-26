@@ -42,6 +42,14 @@
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
+        <activity
+            android:name=".PopAdd"
+            android:theme="@style/AppTheme.Pop">
+        </activity>
+        <activity
+            android:name=".PopAddStudent"
+            android:theme="@style/AppTheme.Pop">
+        </activity>
     </application>
 
 </manifest>
