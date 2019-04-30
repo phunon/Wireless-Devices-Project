@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:gravity="center">
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/do_you_want_to_use_this_username"
+        android:textSize="16sp"
+        />
+
+    <TextView
+        android:id="@+id/showName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/blue_pressed"
+        android:textSize="16sp"/>
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:hint="@string/username"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="5dp"
+        android:background="@drawable/edit_text_border"/>
+
+    <EditText
+        android:id="@+id/yourID"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:hint="@string/please_enter_your_id"
+        android:gravity="center"
+        android:padding="5dp"
+        android:background="@drawable/edit_text_border"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.dd.processbutton.iml.ActionProcessButton
+            android:id="@+id/yes"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/yes"
+            android:textColor="@color/cardview_light_background"
+            android:layout_marginRight="5dp"/>
+
+        <com.dd.processbutton.iml.ActionProcessButton
+            android:id="@+id/no"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/no"
+            android:textColor="@color/cardview_light_background"
+            android:layout_marginLeft="5dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
