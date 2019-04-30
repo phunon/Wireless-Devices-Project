@@ -3,12 +3,10 @@ package th.ac.kku.udomboonyaluck.disra.coclass;
 import android.app.Dialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,11 +14,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,11 +41,14 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference dbRef;
     private CircleImageView profileImage;
     private FirebaseUser firebaseUser;
-    private TextView username;
+    private TextView username,numofCourse;
     private FirebaseUser FireUser;
     String name = "",sid = "";
+    String cCode;
     MyRecyclerAdapter adapter;
     String[] courses;
+    int numCourse = 0, numOfStd = 0;
+    Boolean added = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,14 +77,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Recycler view
         dbRef = database.getReference("courses");
-        dbRef.addValueEventListener(new ValueEventListener() {
+        dbRef.keepSynced(true);
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 updateCourse(dataSnapshot);
 
-                MyRecyclerAdapter adapter = new MyRecyclerAdapter(MainActivity.this,courses);
-                recyclerView.setAdapter(adapter);
+                if(numCourse != 0){
+                    MyRecyclerAdapter adapter = new MyRecyclerAdapter(MainActivity.this,courses);
+                    recyclerView.setAdapter(adapter);
+                }
             }
 
             @Override
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 String name = courseName.getText().toString();
-                                String cCode = code.getText().toString();
+                                cCode = code.getText().toString();
 
                                 writeNewCourse(FireUser.getUid(),name,cCode);
                                 dialog.dismiss();
@@ -162,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
                         dialog.setContentView(R.layout.add_course);
                         dialog.show();
 
+                        added = true;
+
                         final EditText courseCode = dialog.findViewById(R.id.courseCode);
                         Button confirm = dialog.findViewById(R.id.confirm);
 
@@ -175,18 +178,35 @@ public class MainActivity extends AppCompatActivity {
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                                         getUsernameID();
+                                        dbRef.child("courses").child(cCode).orderByChild("username").equalTo(name).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if(dataSnapshot.exists()){
+                                                    added = false;
+                                                }
+                                            }
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            }
+                                        });
 
-                                        if(dataSnapshot.exists()){
+                                        if(dataSnapshot.exists() && added){
                                             dialog.dismiss();
-
                                             Student student = new Student(name,sid,0);
                                             Map<String, Object> studentValues = student.toMap();
-
                                             Map<String, Object> childUpdates = new HashMap<>();
-                                            childUpdates.put("/courses/" + cCode + "/student" + dataSnapshot.getChildrenCount() + "/", studentValues);
+
+                                            numOfStd = 0;
+                                            for (DataSnapshot snapshot : dataSnapshot.child(cCode + "/students/").getChildren()){
+                                                numOfStd += 1;
+                                            }
+
+                                            childUpdates.put("/courses/" + cCode + "/students/student" + numOfStd, studentValues);
                                             dbRef = database.getReference("");
                                             dbRef.updateChildren(childUpdates);
-                                        } else {
+                                            added = false;
+                                        } else if(added) {
+                                            added = false;
                                             Toast.makeText(MainActivity.this,"Course doesn't exist.",Toast.LENGTH_LONG).show();
                                         }
 
@@ -199,7 +219,6 @@ public class MainActivity extends AppCompatActivity {
                                 });
                             }
                         });
-
                     }
                 });
             }
@@ -209,17 +228,34 @@ public class MainActivity extends AppCompatActivity {
         firebaseUser = auth.getCurrentUser();
         profileImage = findViewById(R.id.profileImage);
         Picasso.get().load(firebaseUser.getPhotoUrl()).into(profileImage);
+
+        numofCourse = findViewById(R.id.numOfCourse);
+        numofCourse.setText("Your course : " + numCourse);
+
     }
 
     private void updateCourse(DataSnapshot dataSnapshot) {
-        int i =0;
-        courses = new String[(int) dataSnapshot.getChildrenCount()];
+        int i = 0;
+
         for (DataSnapshot snapshot : dataSnapshot.getChildren()){
             Course course = snapshot.getValue(Course.class);
             String teacher = (String) course.toMap().get("teacher");
-            String courseName = (String) course.toMap().get("coursename");
             if(teacher != null){
                 if(teacher.equals(name)){
+                    numCourse++;
+                }
+            }
+        }
+
+        if(numCourse != 0){
+            numofCourse.setText("Your course : " + numCourse);
+            courses = new String[numCourse];
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                Course course = snapshot.getValue(Course.class);
+                String teacher = (String) course.toMap().get("teacher");
+                String courseName = (String) course.toMap().get("coursename");
+                assert teacher != null;
+                if(teacher.equals(name)) {
                     courses[i] = courseName;
                     i++;
                 }
@@ -256,9 +292,7 @@ public class MainActivity extends AppCompatActivity {
                 sid = (String) user.toMap().get("id");
                 username = findViewById(R.id.showName);
                 username.setText(name);
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 

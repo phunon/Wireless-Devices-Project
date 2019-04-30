@@ -12,21 +12,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:hint="@string/username2"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:background="@drawable/edit_text_border"
+        android:padding="5dp"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
 
     <EditText
         android:id="@+id/yourID"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:hint="@string/example_id"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:background="@drawable/edit_text_border"
+        android:padding="5dp"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
 
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:hint="@string/hintUser"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:background="@drawable/edit_text_border"
+        android:padding="5dp"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
 
     <EditText
         android:id="@+id/password"
@@ -34,7 +49,12 @@
         android:layout_height="match_parent"
         android:hint="@string/hintPass"
         android:gravity="center"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:background="@drawable/edit_text_border"
+        android:padding="5dp"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
 
     <EditText
         android:id="@+id/rePass"
@@ -42,7 +62,12 @@
         android:layout_height="match_parent"
         android:hint="@string/re_password"
         android:gravity="center"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:background="@drawable/edit_text_border"
+        android:padding="5dp"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
 
     <com.dd.processbutton.iml.ActionProcessButton
         android:layout_marginTop="10dp"
