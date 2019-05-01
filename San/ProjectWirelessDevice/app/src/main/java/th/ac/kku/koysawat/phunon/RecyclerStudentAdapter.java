@@ -67,7 +67,7 @@ public class RecyclerStudentAdapter extends RecyclerView.Adapter<RecyclerStudent
             database = FirebaseDatabase.getInstance();
             classData = database.getReference("Class");
 
-
+            //push button plus
             plus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -81,7 +81,7 @@ public class RecyclerStudentAdapter extends RecyclerView.Adapter<RecyclerStudent
                     classData.child(classname).child("Student").child(name).child("Score").setValue(tostring);
                 }
             });
-
+            //push button minus
             minus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

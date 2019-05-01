@@ -107,7 +107,7 @@ public class ClassActivity extends AppCompatActivity implements View.OnClickList
 
         DatabaseReference myRef = database.getReference("Class");
         final TextView tv2 = findViewById(R.id.tv2);
-
+        //get member of course
         final DatabaseReference zonesRef2 = myRef.child(course_name+"/Student/");
         zonesRef2.addValueEventListener(new ValueEventListener() {
             @Override

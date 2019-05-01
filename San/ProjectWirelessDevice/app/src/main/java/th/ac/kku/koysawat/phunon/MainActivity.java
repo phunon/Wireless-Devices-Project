@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         DatabaseReference myRef = database.getReference("User");
 
-
+        //get course name of user
         DatabaseReference zonesRef2 = myRef.child(Name+"/");
         zonesRef2.addValueEventListener(new ValueEventListener() {
             @Override

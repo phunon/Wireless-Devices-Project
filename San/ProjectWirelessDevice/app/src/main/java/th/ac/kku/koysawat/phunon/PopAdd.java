@@ -78,6 +78,7 @@ public class PopAdd extends Activity {
             public void onClick(View v) {
                 final EditText tv_course_name = (EditText) findViewById(R.id.addCourse);
                 final String name2 = tv_course_name.getText().toString();
+                //check all class name
                 for (int i = 0;i< listclass.size();i++){
                     if (name2.equals(listclass.get(i))){
                         Toast.makeText(getApplicationContext(),"had a course name",Toast.LENGTH_SHORT).show();

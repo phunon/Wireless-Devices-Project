@@ -73,11 +73,13 @@ public class PopJoin extends Activity {
 
         Button btn = (Button) findViewById(R.id.bt_add);
         btn.setText("Join");
+        //push join btn
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final EditText tv_course_name = (EditText) findViewById(R.id.addCourse);
                 final String name2 = tv_course_name.getText().toString();
+                //check class name
                 for (int i = 0;i< listclass.size();i++){
                     if (name2.equals(listclass.get(i))){
                         chk = 1;
