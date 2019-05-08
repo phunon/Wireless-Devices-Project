@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     private Dialog dialog;
     private FirebaseDatabase database;
-    private DatabaseReference dbRef;
+    private DatabaseReference dbRef,dbRef2;
     private CircleImageView profileImage;
     private FirebaseUser firebaseUser;
     private TextView username,numofCourse;
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     String[] courses;
     int numCourse = 0, numOfStd = 0;
     Boolean added = false;
+    String cname = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,11 +174,13 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(View v) {
                                 final String cCode = courseCode.getText().toString();
                                 dbRef = database.getReference("");
+
                                 dbRef.child("courses").orderByChild("code").equalTo(cCode).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                                         getUsernameID();
+
                                         dbRef.child("courses").child(cCode).orderByChild("username").equalTo(name).addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -204,6 +207,12 @@ public class MainActivity extends AppCompatActivity {
                                             childUpdates.put("/courses/" + cCode + "/students/student" + numOfStd, studentValues);
                                             dbRef = database.getReference("");
                                             dbRef.updateChildren(childUpdates);
+                                            //get course name
+
+                                            //add to classname of user / can't get course name
+                                            dbRef2 = database.getReference("users");
+                                            dbRef2.child(FireUser.getUid()).child("Course").child(cCode).child("name").setValue(cname);
+                                            dbRef2.child(FireUser.getUid()).child("Course").child(cCode).child("Status").setValue("Student");
                                             added = false;
                                         } else if(added) {
                                             added = false;
@@ -217,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     }
                                 });
+
                             }
                         });
                     }
@@ -273,6 +283,9 @@ public class MainActivity extends AppCompatActivity {
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/courses/" + cCode, courseValues);
         dbRef.updateChildren(childUpdates);
+
+
+
     }
 
     public void signOut() {
