@@ -10,14 +10,26 @@ public class Course {
     public String code;
     public String teacher;
 
-    public Course(){
-
-    }
-
     public Course(String name, String code, String teacher){
         this.coursename = name;
         this.code = code;
         this.teacher = teacher;
+    }
+
+    public void setCoursename(String coursename) {
+        this.coursename = coursename;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
+    }
+
+    public Course() {
+
     }
 
     @Exclude
@@ -27,5 +39,17 @@ public class Course {
         result.put("code",code);
         result.put("teacher",teacher);
         return result;
+    }
+
+    public String getCoursename() {
+        return coursename;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getTeacher() {
+        return teacher;
     }
 }
