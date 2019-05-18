@@ -3,6 +3,9 @@ package th.ac.kku.udomboonyaluck.disra.coclass;
 import android.app.Dialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private Button signOutBtn;
     private ImageButton addCourse;
-    RecyclerView recyclerView;
     private Dialog dialog;
     private FirebaseDatabase database;
     private DatabaseReference dbRef,dbRef2;
@@ -45,11 +47,12 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser FireUser;
     String name = "",sid = "";
     String cCode;
-    MyRecyclerAdapter adapter;
-    String[] courses;
     int numCourse = 0, numOfStd = 0;
     Boolean added = false;
     String cname = "";
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +67,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = findViewById(R.id.recycleView);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
         //add course
 
         database = FirebaseDatabase.getInstance();
@@ -75,27 +74,6 @@ public class MainActivity extends AppCompatActivity {
         FireUser = auth.getCurrentUser();
 
         getUsernameID();
-
-        // Recycler view
-        dbRef = database.getReference("courses");
-        dbRef.keepSynced(true);
-        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                updateCourse(dataSnapshot);
-
-                if(numCourse != 0){
-                    MyRecyclerAdapter adapter = new MyRecyclerAdapter(MainActivity.this,courses);
-                    recyclerView.setAdapter(adapter);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         dialog = new Dialog(this);
         addCourse = findViewById(R.id.addCourse);
@@ -208,11 +186,9 @@ public class MainActivity extends AppCompatActivity {
                                             dbRef = database.getReference("");
                                             dbRef.updateChildren(childUpdates);
                                             //get course name
-
+                                            cname = dataSnapshot.child(cCode).getValue(Course.class).getCoursename();
                                             //add to classname of user / can't get course name
-                                            dbRef2 = database.getReference("users");
-                                            dbRef2.child(FireUser.getUid()).child("Course").child(cCode).child("name").setValue(cname);
-                                            dbRef2.child(FireUser.getUid()).child("Course").child(cCode).child("Status").setValue("Student");
+                                            joinClass(FireUser.getUid(),cname,cCode);
                                             added = false;
                                         } else if(added) {
                                             added = false;
@@ -242,35 +218,32 @@ public class MainActivity extends AppCompatActivity {
         numofCourse = findViewById(R.id.numOfCourse);
         numofCourse.setText("Your course : " + numCourse);
 
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        adapter.AddFragment(new FragmentCourses(),"Course");
+        adapter.AddFragment(new FragmentClasses(),"Class");
+
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
+
     }
 
-    private void updateCourse(DataSnapshot dataSnapshot) {
-        int i = 0;
+    private void joinClass(String uid, String cName, String cCode) {
+        final String teacherName = name;
+        dbRef2 = database.getReference("/users/" + uid);
 
-        for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-            Course course = snapshot.getValue(Course.class);
-            String teacher = (String) course.toMap().get("teacher");
-            if(teacher != null){
-                if(teacher.equals(name)){
-                    numCourse++;
-                }
-            }
-        }
+        Course course = new Course(cName,cCode,teacherName);
+        Map<String, Object> courseValues = course.toMap();
 
-        if(numCourse != 0){
-            numofCourse.setText("Your course : " + numCourse);
-            courses = new String[numCourse];
-            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                Course course = snapshot.getValue(Course.class);
-                String teacher = (String) course.toMap().get("teacher");
-                String courseName = (String) course.toMap().get("coursename");
-                assert teacher != null;
-                if(teacher.equals(name)) {
-                    courses[i] = courseName;
-                    i++;
-                }
-            }
-        }
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.clear();
+        childUpdates.put("/classes/" + cCode, courseValues);
+        dbRef2.updateChildren(childUpdates);
     }
 
     private void writeNewCourse(String uid, String cName, String cCode) {
@@ -284,8 +257,10 @@ public class MainActivity extends AppCompatActivity {
         childUpdates.put("/courses/" + cCode, courseValues);
         dbRef.updateChildren(childUpdates);
 
-
-
+        childUpdates.clear();
+        dbRef = database.getReference("/users/" + uid);
+        childUpdates.put("/owned/" + cName, courseValues);
+        dbRef.updateChildren(childUpdates);
     }
 
     public void signOut() {
