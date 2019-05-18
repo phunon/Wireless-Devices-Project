@@ -1,5 +1,6 @@
 package th.ac.kku.udomboonyaluck.disra.coclass;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,9 +32,10 @@ public class FragmentCourses extends Fragment {
     DatabaseReference dbRef;
     FirebaseUser FireUser;
     String name = "",sid = "";
+    CoursesRecyclerAdapter recyclerViewAdapter;
 
     public FragmentCourses(){
-
+        onCreate(null);
     }
 
     @Nullable
@@ -41,7 +43,6 @@ public class FragmentCourses extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.courses_fragment,container,false);
         myRecyclerView = v.findViewById(R.id.courses_recyclerView);
-        CoursesRecyclerAdapter recyclerViewAdapter = new CoursesRecyclerAdapter(getContext(),lstCourses);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         myRecyclerView.setAdapter(recyclerViewAdapter);
         return v;
@@ -86,6 +87,7 @@ public class FragmentCourses extends Fragment {
 
             }
         });
+        recyclerViewAdapter = new CoursesRecyclerAdapter(getContext(),lstCourses);
 
     }
 }
