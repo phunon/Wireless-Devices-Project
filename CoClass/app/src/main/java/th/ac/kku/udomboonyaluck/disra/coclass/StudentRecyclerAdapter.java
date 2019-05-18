@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentRecycler
     @Override
     public void onBindViewHolder(@NonNull final StudentRecyclerAdapter.Holder holder, final int position) {
         holder.studentName.setText(mData.get(position).getUsername());
+        Picasso.get().load(R.drawable.user_image_default).into(holder.student_img);
 
         database = FirebaseDatabase.getInstance();
         final int[] score = {mData.get(position).getScore()};
