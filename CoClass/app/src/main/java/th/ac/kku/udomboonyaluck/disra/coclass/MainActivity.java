@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
                 signOut();
             }
         });
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         //add course
 
@@ -264,10 +267,6 @@ public class MainActivity extends AppCompatActivity {
 
         numofCourse = findViewById(R.id.numOfCourse);
         numofCourse.setText("Your course : " + numCourse);
-
-        tabLayout = findViewById(R.id.tabLayout);
-        viewPager = findViewById(R.id.viewPager);
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         adapter.AddFragment(new FragmentCourses(),"Course");
         adapter.AddFragment(new FragmentClasses(),"Class");
