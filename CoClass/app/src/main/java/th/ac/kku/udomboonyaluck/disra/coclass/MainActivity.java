@@ -339,11 +339,6 @@ public class MainActivity extends AppCompatActivity {
             dbRef.getRoot().child("users").child(FireUser.getUid()).child("owned").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    adapter.AddFragment(new FragmentCourses(),"Course");
-                    adapter.AddFragment(new FragmentClasses(),"Class");
-
-                    viewPager.setAdapter(adapter);
                     tabLayout.setupWithViewPager(viewPager);
 
                     tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
