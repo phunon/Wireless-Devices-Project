@@ -26,10 +26,7 @@
     <string name="confirm">Confirm</string>
     <string name="example_id">ID ( 593040446-1 )</string>
     <string name="please_enter_your_id">Please enter your ID</string>
-<<<<<<< HEAD
     <string name="Select_The_Action">Select The Action</string>
-=======
     <string name="your_score_is">Your score is</string>
     <string name="score">0</string>
->>>>>>> 610ba345fc3d002fcc5f359894131faa4bd62c8b
 </resources>

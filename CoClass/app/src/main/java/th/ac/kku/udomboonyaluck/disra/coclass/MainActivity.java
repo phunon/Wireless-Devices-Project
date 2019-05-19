@@ -301,8 +301,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // add จำนวน courses
-        firebaseUser = auth.getCurrentUser();
-        dbRef = database.getReference("users/" + firebaseUser.getUid()+"/owned");
+        dbRef = database.getReference("users/" + FireUser.getUid()+"/owned");
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
