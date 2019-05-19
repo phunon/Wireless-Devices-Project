@@ -1,86 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:gravity="top"
+        sothree:umanoPanelHeight="68dp"
+        sothree:umanoShadowHeight="10dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="20dp"
-            android:background="@color/blue_normal">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profileImage"
-                android:layout_width="80dp"
-                android:layout_height="80dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/showName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/cardview_light_background"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/numOfCourse"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@string/your_course"
-                    android:textColor="@color/cardview_light_background"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <android.support.design.widget.TabLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/blue_normal"
-            app:tabMode="fixed"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="#FFF"
-            app:tabIndicatorHeight="2dp"
-            android:id="@+id/tabLayout"
-            app:tabTextColor="#FFF"
-            android:scrollbarAlwaysDrawHorizontalTrack="true"/>
-
-        <android.support.v4.view.ViewPager
+        <include
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/viewPager"/>
+            layout="@layout/layout_main"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
 
-    </LinearLayout>
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/layout_head"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
 
-    <Button
-        android:id="@+id/sign_out"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/sign_out"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
-    <ImageButton
-        android:id="@+id/addCourse"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/plus_selector"
-        android:layout_margin="20dp"/>
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

@@ -1,9 +1,15 @@
 package th.ac.kku.udomboonyaluck.disra.coclass;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+
 import android.support.annotation.Nullable;
+
+import android.support.design.widget.FloatingActionButton;
+
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -12,7 +18,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
 import android.view.LayoutInflater;
+
+import android.view.ContextMenu;
+import android.view.MenuItem;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,6 +39,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.hanks.htextview.base.HTextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -42,25 +54,33 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private Button signOutBtn;
-    private ImageButton addCourse;
+    private ImageButton expanded_menu;
+    private FloatingActionButton addCourse;
     private Dialog dialog;
     private FirebaseDatabase database;
     private DatabaseReference dbRef,dbRef2;
     private CircleImageView profileImage;
-    private FirebaseUser firebaseUser;
     private TextView username,numofCourse;
-    private FirebaseUser FireUser;
+    private FirebaseUser FireUser = auth.getCurrentUser();;
     String name = "",sid = "";
     String cCode;
     int numCourse = 0, numOfStd = 0;
-    Boolean added = false;
+    Boolean added = false,loadData = true;
     String cname = "";
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     ArrayList<String> lstcCode;
+
     ArrayList<String> courseSize;
     ArrayList<Student> lstStudent;
+
+    private HTextView txt_info;
+    int delay = 2000; //milliseconds
+    Handler handler;
+    ArrayList<String> arrMessages = new ArrayList<>();
+    int position=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +97,21 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...please wait");
+        progressDialog.show();
+
+        username = findViewById(R.id.showName);
+
+        //add course
+
+
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("");
-        FireUser = auth.getCurrentUser();
 
         getUsernameID();
         //read code of course from database
@@ -288,20 +320,82 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         profileImage = findViewById(R.id.profileImage);
-        Picasso.get().load(firebaseUser.getPhotoUrl()).into(profileImage);
+        Picasso.get().load(FireUser.getPhotoUrl()).into(profileImage);
 
 
-        adapter.AddFragment(new FragmentCourses(),"Course");
-        adapter.AddFragment(new FragmentClasses(),"Class");
+        numofCourse = findViewById(R.id.numOfCourse);
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
 
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+        // Check dataLoad
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
+        if (loadData) {
+            adapter = new ViewPagerAdapter(getSupportFragmentManager());
+            dbRef.getRoot().child("users").child(FireUser.getUid()).child("owned").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    adapter.AddFragment(new FragmentCourses(),"Course");
+                    adapter.AddFragment(new FragmentClasses(),"Class");
+                    tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
 
+                    viewPager.setAdapter(adapter);
+                    tabLayout.setupWithViewPager(viewPager);
+
+                    tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
+
+                    numCourse = (int) dataSnapshot.getChildrenCount();
+                    numofCourse.setText("Your course : " + numCourse);
+
+                    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value\
+                    Log.i("Firebase databsae",error.toString());
+                    progressDialog.dismiss();
+                }
+            });
+            loadData = false;
+        }
+
+        // Text show
+        arrMessages.add("Slide down");
+        arrMessages.add("See more information");
+        txt_info= findViewById(R.id.txt_info);
+        txt_info.animateText(arrMessages.get(position));
+        handler = new Handler();
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                handler.postDelayed(this, delay);
+                if(position>=arrMessages.size())
+                    position=0;
+                txt_info.animateText(arrMessages.get(position));
+                position++;
+            }
+        }, delay);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.click_list, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.option1:
+                Toast.makeText(MainActivity.this, "Option 1 click",Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.option2:
+                Toast.makeText(MainActivity.this, "Option 2 click",Toast.LENGTH_LONG).show();
+                return true;
+        }
+        return super.onContextItemSelected(item);
 
     }
 
@@ -333,12 +427,17 @@ public class MainActivity extends AppCompatActivity {
         dbRef = database.getReference("/users/" + uid);
         childUpdates.put("/owned/" + cName, courseValues);
         dbRef.updateChildren(childUpdates);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     public void signOut() {
         auth.signOut();
         this.finish();
-        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     public void getUsernameID(){
@@ -350,7 +449,6 @@ public class MainActivity extends AppCompatActivity {
                 assert user != null;
                 name = (String) user.toMap().get("username");
                 sid = (String) user.toMap().get("id");
-                username = findViewById(R.id.showName);
                 username.setText(name);
             }
             @Override
