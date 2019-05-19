@@ -44,7 +44,6 @@ public class CourseActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
 
-        final StudentRecyclerAdapter recyclerViewAdapter = new StudentRecyclerAdapter(CourseActivity.this,lstStudent,code);
         lstStudent = new ArrayList<>();
         dbRef = database.getReference("/courses/");
         dbRef.child(code).child("students").addValueEventListener(new ValueEventListener() {
@@ -63,8 +62,10 @@ public class CourseActivity extends AppCompatActivity {
 
             }
         });
+
         assert lstStudent != null;
-        student_list.setLayoutManager(new LinearLayoutManager(CourseActivity.this));
+        StudentRecyclerAdapter recyclerViewAdapter = new StudentRecyclerAdapter(this,lstStudent,code);
+        student_list.setLayoutManager(new LinearLayoutManager(this));
         student_list.setAdapter(recyclerViewAdapter);
     }
 }

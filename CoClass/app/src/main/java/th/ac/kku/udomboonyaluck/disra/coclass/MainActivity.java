@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -43,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private Button signOutBtn;
-    private ImageButton addCourse,expanded_menu;
+    private ImageButton expanded_menu;
+    private FloatingActionButton addCourse;
     private Dialog dialog;
     private FirebaseDatabase database;
     private DatabaseReference dbRef,dbRef2;
@@ -294,9 +296,6 @@ public class MainActivity extends AppCompatActivity {
 
                     tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
                     tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
-
-                    adapter.AddFragment(new FragmentCourses(),"Course");
-                    adapter.AddFragment(new FragmentClasses(),"Class");
 
                     numCourse = (int) dataSnapshot.getChildrenCount();
                     numofCourse.setText("Your course : " + numCourse);
