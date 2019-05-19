@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     Handler handler;
     ArrayList<String> arrMessages = new ArrayList<>();
     int position=0;
+    private FirebaseUser firebaseUser;
 
 
     @Override
@@ -337,8 +338,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     adapter.AddFragment(new FragmentCourses(),"Course");
                     adapter.AddFragment(new FragmentClasses(),"Class");
-                    tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
-                    tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
 
                     viewPager.setAdapter(adapter);
                     tabLayout.setupWithViewPager(viewPager);
