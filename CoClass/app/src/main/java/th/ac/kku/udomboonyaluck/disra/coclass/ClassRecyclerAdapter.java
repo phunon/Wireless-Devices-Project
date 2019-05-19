@@ -41,6 +41,7 @@ public class ClassRecyclerAdapter extends RecyclerView.Adapter<ClassRecyclerAdap
                 Intent intent = new Intent(context,ClassActivity.class);
                 intent.putExtra("courseName",mData.get(holder.getAdapterPosition()).getCoursename());
                 intent.putExtra("teacher",mData.get(holder.getAdapterPosition()).getTeacher());
+                intent.putExtra("code",mData.get(holder.getAdapterPosition()).getCode());
                 context.startActivity(intent);
             }
         });

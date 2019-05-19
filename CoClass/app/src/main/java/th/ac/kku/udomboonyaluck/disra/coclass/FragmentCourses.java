@@ -35,7 +35,6 @@ public class FragmentCourses extends Fragment {
     CoursesRecyclerAdapter recyclerViewAdapter;
 
     public FragmentCourses(){
-        onCreate(null);
     }
 
     @Nullable
