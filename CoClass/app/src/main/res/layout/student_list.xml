@@ -51,7 +51,7 @@
             android:singleLine="true"
             android:textColor="@color/cardview_light_background"
             android:textAlignment="center"
-            android:text="0"/>
+            android:text=""/>
 
         <Button
             android:id="@+id/subtract"
