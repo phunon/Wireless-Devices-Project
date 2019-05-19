@@ -1,6 +1,7 @@
 package th.ac.kku.udomboonyaluck.disra.coclass;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -10,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -37,18 +42,17 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private Button signOutBtn;
-    private ImageButton addCourse;
+    private ImageButton addCourse,expanded_menu;
     private Dialog dialog;
     private FirebaseDatabase database;
     private DatabaseReference dbRef,dbRef2;
     private CircleImageView profileImage;
-    private FirebaseUser firebaseUser;
     private TextView username,numofCourse;
-    private FirebaseUser FireUser;
+    private FirebaseUser FireUser = auth.getCurrentUser();;
     String name = "",sid = "";
     String cCode;
     int numCourse = 0, numOfStd = 0;
-    Boolean added = false;
+    Boolean added = false,loadData = true;
     String cname = "";
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -67,11 +71,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...please wait");
+        progressDialog.show();
+
+        username = findViewById(R.id.showName);
+
         //add course
 
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("");
-        FireUser = auth.getCurrentUser();
 
         getUsernameID();
 
@@ -209,28 +220,70 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
         // add courses
 
-        firebaseUser = auth.getCurrentUser();
         profileImage = findViewById(R.id.profileImage);
-        Picasso.get().load(firebaseUser.getPhotoUrl()).into(profileImage);
+        Picasso.get().load(FireUser.getPhotoUrl()).into(profileImage);
 
         numofCourse = findViewById(R.id.numOfCourse);
-        numofCourse.setText("Your course : " + numCourse);
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
-        adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        adapter.AddFragment(new FragmentCourses(),"Course");
-        adapter.AddFragment(new FragmentClasses(),"Class");
+        // Check dataLoad
 
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+        if (loadData) {
+            adapter = new ViewPagerAdapter(getSupportFragmentManager());
+            dbRef.getRoot().child("users").child(FireUser.getUid()).child("owned").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    adapter.AddFragment(new FragmentCourses(),"Course");
+                    adapter.AddFragment(new FragmentClasses(),"Class");
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
 
+                    viewPager.setAdapter(adapter);
+                    tabLayout.setupWithViewPager(viewPager);
+
+                    tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
+
+                    numCourse = (int) dataSnapshot.getChildrenCount();
+                    numofCourse.setText("Your course : " + numCourse);
+
+                    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value\
+                    Log.i("Firebase databsae",error.toString());
+                    progressDialog.dismiss();
+                }
+            });
+            loadData = false;
+        }
+
+        expanded_menu = findViewById(R.id.expanded_menu);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.click_list, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.option1:
+                Toast.makeText(MainActivity.this, "Option 1 click",Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.option2:
+                Toast.makeText(MainActivity.this, "Option 2 click",Toast.LENGTH_LONG).show();
+                return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     private void joinClass(String uid, String cName, String cCode) {
@@ -261,12 +314,17 @@ public class MainActivity extends AppCompatActivity {
         dbRef = database.getReference("/users/" + uid);
         childUpdates.put("/owned/" + cName, courseValues);
         dbRef.updateChildren(childUpdates);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     public void signOut() {
         auth.signOut();
         this.finish();
-        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     public void getUsernameID(){
@@ -278,7 +336,6 @@ public class MainActivity extends AppCompatActivity {
                 assert user != null;
                 name = (String) user.toMap().get("username");
                 sid = (String) user.toMap().get("id");
-                username = findViewById(R.id.showName);
                 username.setText(name);
             }
             @Override

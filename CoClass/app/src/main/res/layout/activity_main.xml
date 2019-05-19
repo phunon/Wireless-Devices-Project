@@ -47,6 +47,20 @@
 
         </LinearLayout>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blue_normal">
+
+            <ImageButton
+                android:id="@+id/expanded_menu"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/more"
+                android:layout_gravity="center_horizontal"/>
+
+        </FrameLayout>
+
         <android.support.design.widget.TabLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
