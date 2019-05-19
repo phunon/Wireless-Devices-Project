@@ -42,6 +42,7 @@ public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentRecycler
 
     @Override
     public void onBindViewHolder(@NonNull final StudentRecyclerAdapter.Holder holder, final int position) {
+        holder.score_tv.setText("" + mData.get(position).getScore());
         holder.studentName.setText(mData.get(position).getUsername());
         Picasso.get().load(R.drawable.user_image_default).into(holder.student_img);
 

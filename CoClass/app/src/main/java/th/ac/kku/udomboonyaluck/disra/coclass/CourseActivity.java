@@ -54,6 +54,10 @@ public class CourseActivity extends AppCompatActivity {
                     Student student = snapshot.getValue(Student.class);
                     assert student != null;
                     lstStudent.add(student);
+                    assert lstStudent != null;
+                    StudentRecyclerAdapter recyclerViewAdapter = new StudentRecyclerAdapter(CourseActivity.this,lstStudent,code);
+                    student_list.setLayoutManager(new LinearLayoutManager(CourseActivity.this));
+                    student_list.setAdapter(recyclerViewAdapter);
                 }
             }
 
@@ -63,9 +67,5 @@ public class CourseActivity extends AppCompatActivity {
             }
         });
 
-        assert lstStudent != null;
-        StudentRecyclerAdapter recyclerViewAdapter = new StudentRecyclerAdapter(this,lstStudent,code);
-        student_list.setLayoutManager(new LinearLayoutManager(this));
-        student_list.setAdapter(recyclerViewAdapter);
     }
 }

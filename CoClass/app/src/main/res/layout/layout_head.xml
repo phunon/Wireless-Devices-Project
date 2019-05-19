@@ -92,6 +92,7 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:background="@color/blue_normal">
@@ -105,12 +106,20 @@
                 android:layout_margin="10dp"
                 android:textColor="@color/cardview_light_background"/>
 
-
             <ImageButton
-                android:id="@+id/expanded_menu"
+                android:id="@+id/swipe_up"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="@drawable/more"
+                android:background="@drawable/up"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_margin="10dp"
+                android:visibility="invisible"/>
+
+            <ImageButton
+                android:id="@+id/swipe_down"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/down"
                 android:layout_gravity="center_horizontal|bottom"
                 android:layout_margin="10dp"/>
         </FrameLayout>

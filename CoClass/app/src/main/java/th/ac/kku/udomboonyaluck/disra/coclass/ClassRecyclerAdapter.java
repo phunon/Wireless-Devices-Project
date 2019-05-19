@@ -1,5 +1,6 @@
 package th.ac.kku.udomboonyaluck.disra.coclass;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Vibrator;
@@ -7,18 +8,20 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 public class ClassRecyclerAdapter extends RecyclerView.Adapter<ClassRecyclerAdapter.Holder> {
 
     private List<Course> mData;
-    Context context;
+    static Context context;
 
     public ClassRecyclerAdapter(Context context, List<Course> mData) {
         this.mData = mData;
@@ -67,7 +70,7 @@ public class ClassRecyclerAdapter extends RecyclerView.Adapter<ClassRecyclerAdap
         private LinearLayout classes_list;
         private TextView className;
 
-        public Holder(View itemView){
+        public Holder(View itemView) {
             super(itemView);
 
             itemView.setOnCreateContextMenuListener(this);
@@ -77,9 +80,9 @@ public class ClassRecyclerAdapter extends RecyclerView.Adapter<ClassRecyclerAdap
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.setHeaderTitle("Select The Action");
+            menu.setHeaderTitle(R.string.Select_The_Action);
             menu.add(0, v.getId(), 0, "Edit");
-            menu.add(0, v.getId(), 0, "Delete");
+            menu.add(0, v.getId(), 1, "Delete");
         }
     }
 }
