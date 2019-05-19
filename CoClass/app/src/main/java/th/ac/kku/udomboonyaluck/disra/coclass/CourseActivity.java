@@ -68,13 +68,9 @@ public class CourseActivity extends AppCompatActivity {
             }
         });
 
-<<<<<<< HEAD
         assert lstStudent != null;
         StudentRecyclerAdapter recyclerViewAdapter = new StudentRecyclerAdapter(getBaseContext(),lstStudent,code);
         student_list.setLayoutManager(new LinearLayoutManager(getBaseContext()));
         student_list.setAdapter(recyclerViewAdapter);
-=======
-
->>>>>>> refs/remotes/origin/master
     }
 }
