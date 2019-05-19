@@ -3,6 +3,7 @@ package th.ac.kku.udomboonyaluck.disra.coclass;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -29,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.hanks.htextview.base.HTextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -61,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     ArrayList<String> lstcCode;
+    private HTextView txt_info;
+    int delay = 2000; //milliseconds
+    Handler handler;
+    ArrayList<String> arrMessages = new ArrayList<>();
+    int position=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -313,7 +320,21 @@ public class MainActivity extends AppCompatActivity {
             loadData = false;
         }
 
-        expanded_menu = findViewById(R.id.expanded_menu);
+        // Text show
+        arrMessages.add("Slide down");
+        arrMessages.add("See more information");
+        txt_info= findViewById(R.id.txt_info);
+        txt_info.animateText(arrMessages.get(position));
+        handler = new Handler();
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                handler.postDelayed(this, delay);
+                if(position>=arrMessages.size())
+                    position=0;
+                txt_info.animateText(arrMessages.get(position));
+                position++;
+            }
+        }, delay);
     }
 
     @Override
@@ -372,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
     public void signOut() {
         auth.signOut();
         this.finish();
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
