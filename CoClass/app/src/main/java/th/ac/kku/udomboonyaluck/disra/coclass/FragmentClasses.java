@@ -29,7 +29,7 @@ public class FragmentClasses extends Fragment {
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseDatabase database;
     DatabaseReference dbRef;
-    FirebaseUser FireUser;
+    FirebaseUser FireUser = auth.getCurrentUser();
     String name = "",sid = "";
 
     public FragmentClasses(){
@@ -41,9 +41,7 @@ public class FragmentClasses extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.classes_fragment,container,false);
         myRecyclerView = v.findViewById(R.id.classes_recyclerView);
-        ClassRecyclerAdapter recyclerViewAdapter = new ClassRecyclerAdapter(getContext(),lstClasses);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        myRecyclerView.setAdapter(recyclerViewAdapter);
         return v;
     }
 
@@ -52,7 +50,6 @@ public class FragmentClasses extends Fragment {
         super.onCreate(savedInstanceState);
 
         database = FirebaseDatabase.getInstance();
-        FireUser = auth.getCurrentUser();
 
         lstClasses = new ArrayList<>();
         dbRef = database.getReference("/users/" + FireUser.getUid() + "/classes/");
@@ -64,6 +61,9 @@ public class FragmentClasses extends Fragment {
                     Course course = snapshot.getValue(Course.class);
                     assert course != null;
                     lstClasses.add(course);
+                    ClassRecyclerAdapter recyclerViewAdapter = new ClassRecyclerAdapter(getContext(),lstClasses);
+                    myRecyclerView.setAdapter(recyclerViewAdapter);
+                    registerForContextMenu(myRecyclerView);
                 }
             }
 

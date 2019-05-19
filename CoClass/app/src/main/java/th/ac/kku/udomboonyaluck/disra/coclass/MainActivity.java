@@ -1,8 +1,15 @@
 package th.ac.kku.udomboonyaluck.disra.coclass;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+
+import android.support.annotation.Nullable;
+
+import android.support.design.widget.FloatingActionButton;
+
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -11,7 +18,14 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
+import android.view.LayoutInflater;
+
+import android.view.ContextMenu;
+import android.view.MenuItem;
+
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -25,6 +39,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.hanks.htextview.base.HTextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -37,26 +52,35 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private Button signOutBtn;
-    private ImageButton addCourse;
+    private ImageButton expanded_menu;
+    private FloatingActionButton addCourse;
     private Dialog dialog;
     private FirebaseDatabase database;
     private DatabaseReference dbRef,dbRef2;
     private CircleImageView profileImage;
-    private FirebaseUser firebaseUser;
     private TextView username,numofCourse;
-    private FirebaseUser FireUser;
+    private FirebaseUser FireUser = auth.getCurrentUser();;
     String name = "",sid = "";
     String cCode;
     int numCourse = 0, numOfStd = 0;
-    Boolean added = false;
+    Boolean added = false,loadData = true;
     String cname = "";
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     ArrayList<String> lstcCode;
+
+    ArrayList<String> courseSize;
+    ArrayList<Student> lstStudent;
+
+    private HTextView txt_info;
+    int delay = 2000; //milliseconds
+    Handler handler;
+    ArrayList<String> arrMessages = new ArrayList<>();
+    int position=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +98,20 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...please wait");
+        progressDialog.show();
+
+        username = findViewById(R.id.showName);
+
         //add course
+
 
         database = FirebaseDatabase.getInstance();
         dbRef = database.getReference("");
-        FireUser = auth.getCurrentUser();
 
         getUsernameID();
         //read code of course from database
@@ -179,18 +212,16 @@ public class MainActivity extends AppCompatActivity {
                         dialog.dismiss();
                         dialog.setContentView(R.layout.add_course);
                         dialog.show();
-
-                        added = true;
-
                         final EditText courseCode = dialog.findViewById(R.id.courseCode);
                         Button confirm = dialog.findViewById(R.id.confirm);
                         //join course
                         confirm.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                added = true;
                                 final String cCode = courseCode.getText().toString();
                                 dbRef = database.getReference("");
-                                boolean haveCode = false;
+                                boolean haveCode = false,checkName = true;
                                 for (int i = 0; i<lstcCode.size() ; i++){
                                     if (cCode.equals(lstcCode.get(i))){
                                         haveCode = true;
@@ -198,59 +229,68 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }
                                 if (haveCode) {
-                                    //check students name
-                                }
-
-
-                                dbRef.child("courses").orderByChild("code").equalTo(cCode).addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                        getUsernameID();
-
-                                        dbRef.child("courses").child(cCode).orderByChild("username").equalTo(name).addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                if(dataSnapshot.exists()){
+                                    getUsernameID();
+                                    //ref for check name of user
+                                    lstStudent = new ArrayList<>();
+                                    dbRef = database.getReference("/courses/");
+                                    dbRef.child(cCode).child("students").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            lstStudent.clear();
+                                            for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                                                Student student = snapshot.getValue(Student.class);
+                                                assert student != null;
+                                                //get list of student for use in a future
+                                                lstStudent.add(student);
+                                                if (name.equals(student.getUsername())){
                                                     added = false;
+                                                    break;
                                                 }
                                             }
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            //if added is true add student else don't added student to course
+                                            if ( added ){
+                                                dialog.dismiss();
+                                                Student student = new Student(name,sid,0);
+                                                final Map<String, Object> studentValues = student.toMap();
+                                                final Map<String, Object> childUpdates = new HashMap<>();
+
+                                                numOfStd = lstStudent.size();
+                                                childUpdates.put("/courses/" + cCode + "/students/student" + numOfStd, studentValues);
+                                                dbRef = database.getReference("");
+                                                dbRef.updateChildren(childUpdates);
+
+                                                //get course name / ref for get course name
+                                                dbRef = database.getReference("/courses/");
+                                                dbRef.child(cCode).addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        cname = dataSnapshot.getValue(Course.class).getCoursename() +" ";
+                                                        //add to classname of user / can't get course name
+                                                        joinClass(FireUser.getUid(),cname,cCode);
+                                                        added = false;
+                                                    }
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+                                            } else {
+                                                added = false;
+                                                Toast.makeText(MainActivity.this,"Mee course แล้ว",Toast.LENGTH_LONG).show();
                                             }
-                                        });
 
-                                        if(dataSnapshot.exists() && added){
-                                            dialog.dismiss();
-                                            Student student = new Student(name,sid,0);
-                                            Map<String, Object> studentValues = student.toMap();
-                                            Map<String, Object> childUpdates = new HashMap<>();
-
-                                            numOfStd = 0;
-                                            for (DataSnapshot snapshot : dataSnapshot.child(cCode + "/students/").getChildren()){
-                                                numOfStd += 1;
-                                            }
-
-                                            childUpdates.put("/courses/" + cCode + "/students/student" + numOfStd, studentValues);
-                                            dbRef = database.getReference("");
-                                            dbRef.updateChildren(childUpdates);
-                                            //get course name
-                                            cname = dataSnapshot.child(cCode).getValue(Course.class).getCoursename();
-                                            //add to classname of user / can't get course name
-                                            joinClass(FireUser.getUid(),cname,cCode);
-                                            added = false;
-                                        } else if(added) {
-                                            added = false;
-                                            Toast.makeText(MainActivity.this,"Course doesn't exist.",Toast.LENGTH_LONG).show();
                                         }
 
-                                    }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(MainActivity.this,"Course doesn't exist.",Toast.LENGTH_LONG).show();
+                                    haveCode = false;
+                                }
 
                             }
                         });
@@ -259,25 +299,103 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // add courses
-
+        // add จำนวน courses
         firebaseUser = auth.getCurrentUser();
+        dbRef = database.getReference("users/" + firebaseUser.getUid()+"/owned");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                courseSize = new ArrayList<>();
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                    String code = snapshot.getKey().toString();
+                    courseSize.add(code);
+                    numCourse = courseSize.size();
+                    numofCourse = findViewById(R.id.numOfCourse);
+                    numofCourse.setText("Your course : " + numCourse);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         profileImage = findViewById(R.id.profileImage);
-        Picasso.get().load(firebaseUser.getPhotoUrl()).into(profileImage);
+        Picasso.get().load(FireUser.getPhotoUrl()).into(profileImage);
+
 
         numofCourse = findViewById(R.id.numOfCourse);
-        numofCourse.setText("Your course : " + numCourse);
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
 
-        adapter.AddFragment(new FragmentCourses(),"Course");
-        adapter.AddFragment(new FragmentClasses(),"Class");
+        // Check dataLoad
 
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+        if (loadData) {
+            adapter = new ViewPagerAdapter(getSupportFragmentManager());
+            dbRef.getRoot().child("users").child(FireUser.getUid()).child("owned").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    adapter.AddFragment(new FragmentCourses(),"Course");
+                    adapter.AddFragment(new FragmentClasses(),"Class");
+                    tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
 
+                    viewPager.setAdapter(adapter);
+                    tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
+                    tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
+                    tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
 
+                    numCourse = (int) dataSnapshot.getChildrenCount();
+                    numofCourse.setText("Your course : " + numCourse);
+
+                    progressDialog.dismiss();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value\
+                    Log.i("Firebase databsae",error.toString());
+                    progressDialog.dismiss();
+                }
+            });
+            loadData = false;
+        }
+
+        // Text show
+        arrMessages.add("Slide down");
+        arrMessages.add("See more information");
+        txt_info= findViewById(R.id.txt_info);
+        txt_info.animateText(arrMessages.get(position));
+        handler = new Handler();
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                handler.postDelayed(this, delay);
+                if(position>=arrMessages.size())
+                    position=0;
+                txt_info.animateText(arrMessages.get(position));
+                position++;
+            }
+        }, delay);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.click_list, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.option1:
+                Toast.makeText(MainActivity.this, "Option 1 click",Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.option2:
+                Toast.makeText(MainActivity.this, "Option 2 click",Toast.LENGTH_LONG).show();
+                return true;
+        }
+        return super.onContextItemSelected(item);
 
     }
 
@@ -309,12 +427,17 @@ public class MainActivity extends AppCompatActivity {
         dbRef = database.getReference("/users/" + uid);
         childUpdates.put("/owned/" + cName, courseValues);
         dbRef.updateChildren(childUpdates);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     public void signOut() {
         auth.signOut();
         this.finish();
-        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     public void getUsernameID(){
@@ -326,7 +449,6 @@ public class MainActivity extends AppCompatActivity {
                 assert user != null;
                 name = (String) user.toMap().get("username");
                 sid = (String) user.toMap().get("id");
-                username = findViewById(R.id.showName);
                 username.setText(name);
             }
             @Override

@@ -47,9 +47,13 @@ public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentRecycler
         return holder;
     }
 
+
     @Override
-    public void onBindViewHolder(@NonNull final StudentRecyclerAdapter.Holder holder, final int position) {
+    public void onBindViewHolder(@NonNull final Holder holder,final int position) {
+
+
         holder.studentName.setText(mData.get(position).getUsername());
+        holder.score_tv.setText("" + mData.get(position).getScore());
         Picasso.get().load(R.drawable.user_image_default).into(holder.student_img);
 
         database = FirebaseDatabase.getInstance();
