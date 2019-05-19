@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +55,10 @@ public class CourseActivity extends AppCompatActivity {
                     Student student = snapshot.getValue(Student.class);
                     assert student != null;
                     lstStudent.add(student);
+                    assert lstStudent != null;
+                    StudentRecyclerAdapter recyclerViewAdapter = new StudentRecyclerAdapter(CourseActivity.this,lstStudent,code);
+                    student_list.setLayoutManager(new LinearLayoutManager(CourseActivity.this));
+                    student_list.setAdapter(recyclerViewAdapter);
                 }
                 assert lstStudent != null;
                 StudentRecyclerAdapter recyclerViewAdapter = new StudentRecyclerAdapter(CourseActivity.this,lstStudent,code);
@@ -66,7 +71,5 @@ public class CourseActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 }

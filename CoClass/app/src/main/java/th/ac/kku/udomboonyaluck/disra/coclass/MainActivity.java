@@ -28,7 +28,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser firebaseUser;
     private Button signOutBtn;
-    private ImageButton expanded_menu;
     private FloatingActionButton addCourse;
     private Dialog dialog;
     private FirebaseDatabase database;
@@ -301,8 +302,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // add จำนวน courses
-        firebaseUser = auth.getCurrentUser();
-        dbRef = database.getReference("users/" + firebaseUser.getUid()+"/owned");
+        dbRef = database.getReference("users/" + FireUser.getUid()+"/owned");
         dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -339,8 +339,11 @@ public class MainActivity extends AppCompatActivity {
             dbRef.getRoot().child("users").child(FireUser.getUid()).child("owned").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    //tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
-                    //tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
+
+                    adapter.AddFragment(new FragmentCourses(),"Course");
+                    adapter.AddFragment(new FragmentClasses(),"Class");
+
+                    viewPager.setAdapter(adapter);
                     tabLayout.setupWithViewPager(viewPager);
 
                     tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
@@ -363,9 +366,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Text show
+
         arrMessages.add("Slide down");
         arrMessages.add("See more information");
-        txt_info= findViewById(R.id.txt_info);
+        txt_info = findViewById(R.id.txt_info);
         txt_info.animateText(arrMessages.get(position));
         handler = new Handler();
         handler.postDelayed(new Runnable(){
