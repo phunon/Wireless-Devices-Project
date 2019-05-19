@@ -11,7 +11,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="username">New username</string>
-    <string name="create_user">Create user</string>
+    <string name="create_user">Create an account</string>
     <string name="re_password">Re-Password</string>
     <string name="submit">Submit</string>
     <string name="username2">Username</string>
@@ -26,4 +26,6 @@
     <string name="confirm">Confirm</string>
     <string name="example_id">ID ( 593040446-1 )</string>
     <string name="please_enter_your_id">Please enter your ID</string>
+    <string name="your_score_is">Your score is</string>
+    <string name="score">0</string>
 </resources>
