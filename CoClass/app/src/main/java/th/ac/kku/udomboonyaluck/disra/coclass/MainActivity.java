@@ -12,11 +12,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-<<<<<<< HEAD
 import android.view.ContextMenu;
 import android.view.MenuItem;
-=======
->>>>>>> 6613582161cb005ef0e49c50c06c9a9f86506410
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -278,7 +275,6 @@ public class MainActivity extends AppCompatActivity {
 
         numofCourse = findViewById(R.id.numOfCourse);
 
-<<<<<<< HEAD
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
 
@@ -298,15 +294,13 @@ public class MainActivity extends AppCompatActivity {
 
                     tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
                     tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
-=======
-        adapter.AddFragment(new FragmentCourses(),"Course");
-        adapter.AddFragment(new FragmentClasses(),"Class");
->>>>>>> 6613582161cb005ef0e49c50c06c9a9f86506410
+
+                    adapter.AddFragment(new FragmentCourses(),"Course");
+                    adapter.AddFragment(new FragmentClasses(),"Class");
 
                     numCourse = (int) dataSnapshot.getChildrenCount();
                     numofCourse.setText("Your course : " + numCourse);
 
-<<<<<<< HEAD
                     progressDialog.dismiss();
                 }
 
@@ -340,13 +334,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onContextItemSelected(item);
-=======
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
-
-
->>>>>>> 6613582161cb005ef0e49c50c06c9a9f86506410
     }
 
     private void joinClass(String uid, String cName, String cCode) {
