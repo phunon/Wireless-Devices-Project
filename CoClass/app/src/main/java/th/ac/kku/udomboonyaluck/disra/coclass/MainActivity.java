@@ -12,8 +12,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+<<<<<<< HEAD
 import android.view.ContextMenu;
 import android.view.MenuItem;
+=======
+>>>>>>> 6613582161cb005ef0e49c50c06c9a9f86506410
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +35,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -57,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
+    ArrayList<String> lstcCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
                 signOut();
             }
         });
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viewPager);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -85,6 +93,24 @@ public class MainActivity extends AppCompatActivity {
         dbRef = database.getReference("");
 
         getUsernameID();
+        //read code of course from database
+        dbRef = database.getReference("courses/");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                lstcCode = new ArrayList<>();
+                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                    String code = snapshot.getKey().toString();
+                    lstcCode.add(code);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         dialog = new Dialog(this);
         addCourse = findViewById(R.id.addCourse);
@@ -120,15 +146,28 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(View v) {
                                 String name = courseName.getText().toString();
                                 cCode = code.getText().toString();
+                                boolean ckcode = true;
+                                for(int i = 0; i< lstcCode.size();i++){
+                                    if(lstcCode.get(i).equals(cCode)){
+                                        Toast.makeText(MainActivity.this,"Code ซ้ำนะจ๊ะ 555",Toast.LENGTH_LONG).show();
+                                        ckcode = false;
+                                        break;
+                                    }
+                                }
+                                if (ckcode){
+                                    writeNewCourse(FireUser.getUid(),name,cCode);
+                                    dialog.dismiss();
+                                } else {
+                                    ckcode = true;
+                                }
 
-                                writeNewCourse(FireUser.getUid(),name,cCode);
-                                dialog.dismiss();
                             }
                         });
 
                         random.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                // random code
                                 String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
                                 Random rand = new Random();
                                 String codeStr = "";
@@ -157,12 +196,23 @@ public class MainActivity extends AppCompatActivity {
 
                         final EditText courseCode = dialog.findViewById(R.id.courseCode);
                         Button confirm = dialog.findViewById(R.id.confirm);
-
+                        //join course
                         confirm.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 final String cCode = courseCode.getText().toString();
                                 dbRef = database.getReference("");
+                                boolean haveCode = false;
+                                for (int i = 0; i<lstcCode.size() ; i++){
+                                    if (cCode.equals(lstcCode.get(i))){
+                                        haveCode = true;
+                                        break;
+                                    }
+                                }
+                                if (haveCode) {
+                                    //check students name
+                                }
+
 
                                 dbRef.child("courses").orderByChild("code").equalTo(cCode).addValueEventListener(new ValueEventListener() {
                                     @Override
@@ -228,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
         numofCourse = findViewById(R.id.numOfCourse);
 
+<<<<<<< HEAD
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
 
@@ -247,10 +298,15 @@ public class MainActivity extends AppCompatActivity {
 
                     tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
                     tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
+=======
+        adapter.AddFragment(new FragmentCourses(),"Course");
+        adapter.AddFragment(new FragmentClasses(),"Class");
+>>>>>>> 6613582161cb005ef0e49c50c06c9a9f86506410
 
                     numCourse = (int) dataSnapshot.getChildrenCount();
                     numofCourse.setText("Your course : " + numCourse);
 
+<<<<<<< HEAD
                     progressDialog.dismiss();
                 }
 
@@ -284,6 +340,13 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onContextItemSelected(item);
+=======
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
+
+
+>>>>>>> 6613582161cb005ef0e49c50c06c9a9f86506410
     }
 
     private void joinClass(String uid, String cName, String cCode) {
@@ -344,4 +407,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }

@@ -1,5 +1,6 @@
 package th.ac.kku.udomboonyaluck.disra.coclass;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,9 +32,10 @@ public class FragmentCourses extends Fragment {
     DatabaseReference dbRef;
     FirebaseUser FireUser = auth.getCurrentUser();
     String name = "",sid = "";
+    CoursesRecyclerAdapter recyclerViewAdapter;
 
     public FragmentCourses(){
-
+        onCreate(null);
     }
 
     @Nullable
@@ -86,6 +88,7 @@ public class FragmentCourses extends Fragment {
 
             }
         });
+        recyclerViewAdapter = new CoursesRecyclerAdapter(getContext(),lstCourses);
 
     }
 }
