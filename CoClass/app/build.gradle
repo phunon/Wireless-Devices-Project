@@ -45,6 +45,6 @@ dependencies {
     // Sliding up
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
     // Animation text
-    implementation "com.hanks:htextview-base:0.1.6"
-    implementation "com.hanks:htextview-scale:0.1.6"
+    implementation 'com.hanks:htextview-base:0.1.6'
+    implementation 'com.hanks:htextview-scale:0.1.6'
 }

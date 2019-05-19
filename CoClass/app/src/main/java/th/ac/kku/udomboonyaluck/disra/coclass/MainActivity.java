@@ -53,6 +53,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseUser firebaseUser;
     private Button signOutBtn;
     private ImageButton expanded_menu;
     private FloatingActionButton addCourse;
@@ -329,18 +330,17 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
 
         // Check dataLoad
+        adapter.AddFragment(new FragmentCourses(),"Course");
+        adapter.AddFragment(new FragmentClasses(),"Class");
 
+        viewPager.setAdapter(adapter);
         if (loadData) {
             adapter = new ViewPagerAdapter(getSupportFragmentManager());
             dbRef.getRoot().child("users").child(FireUser.getUid()).child("owned").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    adapter.AddFragment(new FragmentCourses(),"Course");
-                    adapter.AddFragment(new FragmentClasses(),"Class");
-                    tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
-                    tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
-
-                    viewPager.setAdapter(adapter);
+                    //tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
+                    //tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
                     tabLayout.setupWithViewPager(viewPager);
 
                     tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
