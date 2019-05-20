@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,20 +22,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentRecyclerAdapter.Holder>{
 
     private List<Student> mData;
+    ArrayList<String> lstUrl;
     Context context;
     private String code;
     private FirebaseDatabase database;
     private DatabaseReference dbRef;
 
-    public StudentRecyclerAdapter(Context context, List<Student> mData,String code) {
+    public StudentRecyclerAdapter(Context context, List<Student> mData, String code, ArrayList<String> lstUrl) {
         this.mData = mData;
         this.context = context;
         this.code = code;
+        this.lstUrl = lstUrl;
     }
 
     @NonNull
@@ -52,7 +56,8 @@ public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentRecycler
     public void onBindViewHolder(@NonNull final StudentRecyclerAdapter.Holder holder, final int position) {
         holder.score_tv.setText("" + mData.get(position).getScore());
         holder.studentName.setText(mData.get(position).getUsername());
-        Picasso.get().load(R.drawable.user_image_default).into(holder.student_img);
+        //Glide.with(this).load(lstUrl.get(position)).into(holder.student_img);
+        Picasso.get().load(lstUrl.get(position)).into(holder.student_img);
 
         database = FirebaseDatabase.getInstance();
         final int[] score = {mData.get(position).getScore()};

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,10 +29,12 @@ public class CourseActivity extends AppCompatActivity {
     private String code;
     FirebaseDatabase database;
     DatabaseReference dbRef;
+    ArrayList<String> lstUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        lstUrl = new ArrayList<>();
         setContentView(R.layout.activity_course);
 
         Intent intent = getIntent();
@@ -51,17 +54,19 @@ public class CourseActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 lstStudent.clear();
+                lstUrl.clear();
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
                     Student student = snapshot.getValue(Student.class);
                     assert student != null;
                     lstStudent.add(student);
                     assert lstStudent != null;
-                    StudentRecyclerAdapter recyclerViewAdapter = new StudentRecyclerAdapter(CourseActivity.this,lstStudent,code);
+                    lstUrl.add(snapshot.child("proUrl").getValue().toString());
+                    StudentRecyclerAdapter recyclerViewAdapter = new StudentRecyclerAdapter(CourseActivity.this,lstStudent,code,lstUrl);
                     student_list.setLayoutManager(new LinearLayoutManager(CourseActivity.this));
                     student_list.setAdapter(recyclerViewAdapter);
                 }
                 assert lstStudent != null;
-                StudentRecyclerAdapter recyclerViewAdapter = new StudentRecyclerAdapter(CourseActivity.this,lstStudent,code);
+                StudentRecyclerAdapter recyclerViewAdapter = new StudentRecyclerAdapter(CourseActivity.this,lstStudent,code,lstUrl);
                 student_list.setLayoutManager(new LinearLayoutManager(CourseActivity.this));
                 student_list.setAdapter(recyclerViewAdapter);
             }

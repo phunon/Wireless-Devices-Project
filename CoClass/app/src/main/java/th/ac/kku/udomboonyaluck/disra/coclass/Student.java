@@ -9,15 +9,16 @@ public class Student {
     public String username;
     public String id;
     public int score;
-
+    String url;
     public Student(){
 
     }
 
-    public Student(String username,String id, int score){
+    public Student(String username,String id, int score,String url){
         this.username = username;
         this.id = id;
         this.score = score;
+        this.url = url;
     }
 
     @Exclude
@@ -26,6 +27,7 @@ public class Student {
         result.put("username",username);
         result.put("id",id);
         result.put("score",score);
+        result.put("proUrl",url);
         return result;
     }
 
@@ -52,4 +54,13 @@ public class Student {
     public void setScore(int score) {
         this.score = score;
     }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
 }

@@ -55,7 +55,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
-    private FirebaseUser firebaseUser;
     private Button signOutBtn;
     private FloatingActionButton addCourse;
     private Dialog dialog;
@@ -63,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference dbRef,dbRef2;
     private CircleImageView profileImage;
     private TextView username,numofCourse;
-    private FirebaseUser FireUser = auth.getCurrentUser();;
-    String name = "",sid = "";
+    private FirebaseUser FireUser = auth.getCurrentUser();
+    String name = "",sid = "",url = "";
     String cCode;
     int numCourse = 0, numOfStd = 0;
     Boolean added = false,loadData = true;
@@ -252,7 +251,8 @@ public class MainActivity extends AppCompatActivity {
                                             //if added is true add student else don't added student to course
                                             if ( added ){
                                                 dialog.dismiss();
-                                                Student student = new Student(name,sid,0);
+                                                url  = FireUser.getPhotoUrl().toString();
+                                                Student student = new Student(name,sid,0,url);
                                                 final Map<String, Object> studentValues = student.toMap();
                                                 final Map<String, Object> childUpdates = new HashMap<>();
 
@@ -260,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
                                                 childUpdates.put("/courses/" + cCode + "/students/student" + numOfStd, studentValues);
                                                 dbRef = database.getReference("");
                                                 dbRef.updateChildren(childUpdates);
+                                                Log.d("test",url);
 
                                                 //get course name / ref for get course name
                                                 dbRef = database.getReference("/courses/");
@@ -325,6 +326,8 @@ public class MainActivity extends AppCompatActivity {
         Picasso.get().load(FireUser.getPhotoUrl()).into(profileImage);
 
 
+
+
         numofCourse = findViewById(R.id.numOfCourse);
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
@@ -361,7 +364,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Text show
-
         arrMessages.add("Slide down");
         arrMessages.add("See more information");
         txt_info = findViewById(R.id.txt_info);
