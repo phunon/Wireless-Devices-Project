@@ -52,20 +52,20 @@ import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
-    private Button signOutBtn;
+    private Button signOutBtn,aboutBtn,helpBtn,settingBtn;
     private FloatingActionButton addCourse;
     private Dialog dialog;
     private FirebaseDatabase database;
     private DatabaseReference dbRef,dbRef2;
     private CircleImageView profileImage;
-    private TextView username,numofCourse;
+    private TextView username,email;
     private FirebaseUser FireUser = auth.getCurrentUser();
     String name = "",sid = "",url = "";
     String cCode;
-    int numCourse = 0, numOfStd = 0;
+    int numOfStd = 0;
     Boolean added = false,loadData = true;
     String cname = "";
     private TabLayout tabLayout;
@@ -88,13 +88,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        signOutBtn = findViewById(R.id.sign_out);
-        signOutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signOut();
-            }
-        });
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -107,6 +100,15 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.show();
 
         username = findViewById(R.id.showName);
+        email = findViewById(R.id.showEmail);
+        aboutBtn = findViewById(R.id.about);
+        helpBtn = findViewById(R.id.help);
+        settingBtn = findViewById(R.id.setting);
+        signOutBtn = findViewById(R.id.sign_out);
+        aboutBtn.setOnClickListener(this);
+        helpBtn.setOnClickListener(this);
+        settingBtn.setOnClickListener(this);
+        signOutBtn.setOnClickListener(this);
 
         //add course
 
@@ -302,33 +304,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // add จำนวน courses
-        dbRef = database.getReference("users/" + FireUser.getUid()+"/owned");
-        dbRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                courseSize = new ArrayList<>();
-                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-                    String code = snapshot.getKey().toString();
-                    courseSize.add(code);
-                    numCourse = courseSize.size();
-                    numofCourse = findViewById(R.id.numOfCourse);
-                    numofCourse.setText("Your course : " + numCourse);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
         profileImage = findViewById(R.id.profileImage);
         Picasso.get().load(FireUser.getPhotoUrl()).into(profileImage);
 
-
-
-
-        numofCourse = findViewById(R.id.numOfCourse);
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
 
@@ -346,9 +324,6 @@ public class MainActivity extends AppCompatActivity {
 
                     tabLayout.getTabAt(0).setIcon(R.drawable.ic_course);
                     tabLayout.getTabAt(1).setIcon(R.drawable.ic_class);
-
-                    numCourse = (int) dataSnapshot.getChildrenCount();
-                    numofCourse.setText("Your course : " + numCourse);
 
                     progressDialog.dismiss();
                 }
@@ -428,6 +403,7 @@ public class MainActivity extends AppCompatActivity {
                 name = (String) user.toMap().get("username");
                 sid = (String) user.toMap().get("id");
                 username.setText(name);
+                email.setText(FireUser.getEmail());
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -436,4 +412,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.about:
+                startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                break;
+            case R.id.help:
+                break;
+            case R.id.setting:
+                break;
+            case R.id.sign_out:
+                signOut();
+                break;
+        }
+    }
 }

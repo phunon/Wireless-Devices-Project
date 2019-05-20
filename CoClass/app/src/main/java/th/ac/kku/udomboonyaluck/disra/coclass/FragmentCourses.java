@@ -82,13 +82,11 @@ public class FragmentCourses extends Fragment {
                     registerForContextMenu(myRecyclerView);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
-        recyclerViewAdapter = new CoursesRecyclerAdapter(getContext(),lstCourses);
     }
 
     @Override

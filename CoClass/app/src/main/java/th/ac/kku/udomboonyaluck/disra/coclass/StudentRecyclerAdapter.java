@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -59,7 +58,6 @@ public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentRecycler
     public void onBindViewHolder(@NonNull final StudentRecyclerAdapter.Holder holder, final int position) {
         holder.score_tv.setText("" + mData.get(position).getScore());
         holder.studentName.setText(mData.get(position).getUsername());
-        //Glide.with(this).load(lstUrl.get(position)).into(holder.student_img);
         Picasso.get().load(lstUrl.get(position)).into(holder.student_img);
 
         database = FirebaseDatabase.getInstance();

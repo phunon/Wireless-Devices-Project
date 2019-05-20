@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,18 +18,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
 public class CoursesRecyclerAdapter extends RecyclerView.Adapter<CoursesRecyclerAdapter.Holder> {
 
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
     private List<Course> mData;
     Context context;
+    String code,cname;
+    private FirebaseUser FireUser = auth.getCurrentUser();
     private FirebaseDatabase database;
     private DatabaseReference dbRef;
 
@@ -39,7 +48,7 @@ public class CoursesRecyclerAdapter extends RecyclerView.Adapter<CoursesRecycler
 
     @NonNull
     @Override
-    public Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.course_list,viewGroup,false);
         final Holder holder = new Holder(view);
         final Vibrator vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -57,6 +66,8 @@ public class CoursesRecyclerAdapter extends RecyclerView.Adapter<CoursesRecycler
         holder.courses_list.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                code = mData.get(holder.getAdapterPosition()).getCode();
+                cname = mData.get(holder.getAdapterPosition()).getCoursename();
                 vibe.vibrate(80);
                 return false;
             }
@@ -76,29 +87,45 @@ public class CoursesRecyclerAdapter extends RecyclerView.Adapter<CoursesRecycler
         return mData.size();
     }
 
-    public  void getItemSelected(MenuItem item) {
-        if(item.getTitle().equals("Edit")) {
-            Toast.makeText(context,"Edited",Toast.LENGTH_LONG).show();
-        } else if(item.getTitle().equals("Delete")) {
-            Toast.makeText(context,"Deleted",Toast.LENGTH_LONG).show();
+    public void getItemSelected(MenuItem item) {
+        if(item.getTitle().equals("Delete")) {
+            accessData();
         }
     }
 
     public void accessData() {
         database = FirebaseDatabase.getInstance();
-        /*
-        dbRef = database.getReference("/courses/" + code + "/queues/");
-        dbRef.child(mData.get(position).getUsername()).addValueEventListener(new ValueEventListener() {
+
+        dbRef = database.getReference("/courses/");
+        dbRef.child(code).removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.i("Delete", "Course deleted.");
+                        } else {
+                            Log.i("Delete", "No Data.");
+                        }
+                    }
+                });
+        dbRef = database.getReference("/users/");
+        dbRef.child(FireUser.getUid()).child("owned").child(cname).removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.i("Delete", "Course owner deleted.");
+                        } else {
+                            Log.i("Delete", "No Data.");
+                        }
+                    }
+                });
+        dbRef = database.getReference("/users/");
+        dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    holder.wow.setVisibility(View.VISIBLE);
-                    Animation animation = AnimationUtils.loadAnimation(context,R.anim.bounce);
-                    animation.setRepeatMode(1);
-                    holder.wow.startAnimation(animation);
-                } else if (!dataSnapshot.exists()){
-                    holder.wow.clearAnimation();
-                    holder.wow.setVisibility(View.GONE);
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    data.child("classes").child(code).getRef().removeValue();
                 }
             }
 
@@ -106,7 +133,10 @@ public class CoursesRecyclerAdapter extends RecyclerView.Adapter<CoursesRecycler
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });*/
+        });
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
     }
 
     static class Holder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
@@ -125,7 +155,6 @@ public class CoursesRecyclerAdapter extends RecyclerView.Adapter<CoursesRecycler
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             menu.setHeaderTitle("Select The Action");
-            menu.add(0, v.getId(), 0, "Edit");
             menu.add(0, v.getId(), 0, "Delete");
         }
 

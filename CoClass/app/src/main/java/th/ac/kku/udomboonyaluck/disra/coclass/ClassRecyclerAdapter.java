@@ -69,9 +69,9 @@ public class ClassRecyclerAdapter extends RecyclerView.Adapter<ClassRecyclerAdap
     }
 
     public  void getItemSelected(MenuItem item) {
-        if(item.getTitle().equals("Edit")) {
+        if(item.getTitle().equals("Edit2")) {
             Toast.makeText(context,"Edited",Toast.LENGTH_LONG).show();
-        } else if(item.getTitle().equals("Delete")) {
+        } else if(item.getTitle().equals("Delete2")) {
             Toast.makeText(context,"Deleted",Toast.LENGTH_LONG).show();
         }
     }
@@ -92,8 +92,8 @@ public class ClassRecyclerAdapter extends RecyclerView.Adapter<ClassRecyclerAdap
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             menu.setHeaderTitle("Select The Action");
-            menu.add(0, v.getId(), 0, "Edit");
-            menu.add(0, v.getId(), 0, "Delete");
+            menu.add(0, v.getId(), 0, "Edit2");
+            menu.add(0, v.getId(), 0, "Delete2");
         }
     }
 }
