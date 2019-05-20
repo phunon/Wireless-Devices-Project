@@ -29,4 +29,6 @@
     <string name="Select_The_Action">Select The Action</string>
     <string name="your_score_is">Your score is</string>
     <string name="score">0</string>
+    <string name="teacher_aren_t_called">You have not called the teacher</string>
+    <string name="export_to_json">Export to json</string>
 </resources>

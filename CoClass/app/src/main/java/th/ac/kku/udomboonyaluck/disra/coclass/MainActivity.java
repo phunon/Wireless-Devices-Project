@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                                 boolean ckcode = true;
                                 for(int i = 0; i< lstcCode.size();i++){
                                     if(lstcCode.get(i).equals(cCode)){
-                                        Toast.makeText(MainActivity.this,"Code ซ้ำนะจ๊ะ 555",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(MainActivity.this,"Code is already exist",Toast.LENGTH_LONG).show();
                                         ckcode = false;
                                         break;
                                     }
@@ -279,7 +279,6 @@ public class MainActivity extends AppCompatActivity {
 
                                             } else {
                                                 added = false;
-                                                Toast.makeText(MainActivity.this,"Mee course แล้ว",Toast.LENGTH_LONG).show();
                                             }
 
                                         }

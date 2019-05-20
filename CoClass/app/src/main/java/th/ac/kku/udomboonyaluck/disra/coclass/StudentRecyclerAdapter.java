@@ -65,7 +65,7 @@ public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentRecycler
                     dbRef.setValue(score[0]);
                     holder.score_tv.setText(String.valueOf(score[0]));
                 }else {
-                    score[0] = 0;
+                    score[0] = 2;
                     dbRef.setValue(score[0]);
                     holder.score_tv.setText(String.valueOf(score[0]));
                 }
@@ -82,7 +82,7 @@ public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentRecycler
                     dbRef.setValue(score[0]);
                     holder.score_tv.setText(String.valueOf(score[0]));
                 } else {
-                    score[0] = 2;
+                    score[0] = 0;
                     dbRef.setValue(score[0]);
                     holder.score_tv.setText(String.valueOf(score[0]));
                 }
