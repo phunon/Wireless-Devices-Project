@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-<<<<<<< HEAD
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.DragAndDropPermissions;
@@ -16,9 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-=======
 import android.util.Log;
->>>>>>> dc0e923a303c2128a7c7ae757a68c8557f5a2e33
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
