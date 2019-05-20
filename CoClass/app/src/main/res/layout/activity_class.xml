@@ -65,14 +65,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <RelativeLayout
-                android:layout_width="200dp"
+                android:layout_width="215dp"
                 android:layout_height="200dp">
 
                 <ImageView
-                    android:layout_width="match_parent"
+                    android:layout_width="200dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/brightness_selector"/>
 
@@ -81,9 +82,25 @@
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:background="@drawable/attention_selector"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="25dp"/>
+
+                <ImageButton
+                    android:id="@+id/callCancel"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/ic_cancel"
+                    android:layout_alignParentEnd="true"/>
 
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/callStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="@string/teacher_aren_t_called"
+                android:layout_marginTop="16dp"/>
 
         </LinearLayout>
     </LinearLayout>
