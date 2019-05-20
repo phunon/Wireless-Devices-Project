@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -76,7 +77,7 @@ public class FragmentCourses extends Fragment {
                     Course course = snapshot.getValue(Course.class);
                     assert course != null;
                     lstCourses.add(course);
-                    CoursesRecyclerAdapter recyclerViewAdapter = new CoursesRecyclerAdapter(getContext(),lstCourses);
+                    recyclerViewAdapter = new CoursesRecyclerAdapter(getContext(),lstCourses);
                     myRecyclerView.setAdapter(recyclerViewAdapter);
                     registerForContextMenu(myRecyclerView);
                 }
@@ -88,6 +89,12 @@ public class FragmentCourses extends Fragment {
             }
         });
         recyclerViewAdapter = new CoursesRecyclerAdapter(getContext(),lstCourses);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        recyclerViewAdapter.getItemSelected(item);
+        return super.onContextItemSelected(item);
 
     }
 }

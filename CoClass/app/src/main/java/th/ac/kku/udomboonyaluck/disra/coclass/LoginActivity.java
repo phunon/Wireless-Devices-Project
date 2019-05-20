@@ -209,9 +209,9 @@ public class LoginActivity extends AppCompatActivity {
                                             public void onClick(View v) {
 
                                                 if(username.getText().toString().equals("")){
-                                                    writeNewUser(FireUser.getUid(),FireUser.getDisplayName(),FireUser.getEmail(),id.getText().toString());
+                                                    writeNewUser(FireUser.getUid(),FireUser.getDisplayName(),FireUser.getEmail(),id.getText().toString(),FireUser.getPhotoUrl().toString());
                                                 } else {
-                                                    writeNewUser(FireUser.getUid(),username.getText().toString(),FireUser.getEmail(),id.getText().toString());
+                                                    writeNewUser(FireUser.getUid(),username.getText().toString(),FireUser.getEmail(),id.getText().toString(),FireUser.getPhotoUrl().toString());
                                                 }
 
                                                 dialog.dismiss();
@@ -259,9 +259,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void writeNewUser(String userID, String name, String email, String id) {
+    private void writeNewUser(String userID, String name, String email, String id,String url) {
         String key = dbRef.child("users").push().getKey();
-        User user = new User(name,email,id);
+        User user = new User(name,email,id,url);
         Map<String, Object> userValues = user.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
@@ -279,7 +279,7 @@ public class LoginActivity extends AppCompatActivity {
                             dialog.dismiss();
                             FireUser = auth.getCurrentUser();
                             assert FireUser != null;
-                            writeNewUser(FireUser.getUid(),username,FireUser.getEmail(),id);
+                            writeNewUser(FireUser.getUid(),username,FireUser.getEmail(),id,FireUser.getPhotoUrl().toString());
                             firebaseLogin(email,password);
                         } else {
                             Toast.makeText(LoginActivity.this,"Create Fail!",Toast.LENGTH_SHORT).show();
