@@ -378,26 +378,6 @@ public class MainActivity extends AppCompatActivity {
         }, delay);
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.click_list, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.option1:
-                Toast.makeText(MainActivity.this, "Option 1 click",Toast.LENGTH_LONG).show();
-                return true;
-            case R.id.option2:
-                Toast.makeText(MainActivity.this, "Option 2 click",Toast.LENGTH_LONG).show();
-                return true;
-        }
-        return super.onContextItemSelected(item);
-
-    }
-
     private void joinClass(String uid, String cName, String cCode) {
         final String teacherName = name;
         dbRef2 = database.getReference("/users/" + uid);

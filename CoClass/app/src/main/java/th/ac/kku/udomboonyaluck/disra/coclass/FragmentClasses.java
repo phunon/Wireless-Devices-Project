@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -31,6 +32,7 @@ public class FragmentClasses extends Fragment {
     DatabaseReference dbRef;
     FirebaseUser FireUser = auth.getCurrentUser();
     String name = "",sid = "";
+    ClassRecyclerAdapter recyclerViewAdapter;
 
     public FragmentClasses(){
 
@@ -61,7 +63,7 @@ public class FragmentClasses extends Fragment {
                     Course course = snapshot.getValue(Course.class);
                     assert course != null;
                     lstClasses.add(course);
-                    ClassRecyclerAdapter recyclerViewAdapter = new ClassRecyclerAdapter(getContext(),lstClasses);
+                    recyclerViewAdapter= new ClassRecyclerAdapter(getContext(),lstClasses);
                     myRecyclerView.setAdapter(recyclerViewAdapter);
                     registerForContextMenu(myRecyclerView);
                 }
@@ -72,7 +74,12 @@ public class FragmentClasses extends Fragment {
 
             }
         });
-
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        recyclerViewAdapter.getItemSelected(item);
+        return super.onContextItemSelected(item);
+
     }
+}

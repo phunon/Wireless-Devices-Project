@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -66,6 +68,14 @@ public class ClassRecyclerAdapter extends RecyclerView.Adapter<ClassRecyclerAdap
         return mData.size();
     }
 
+    public  void getItemSelected(MenuItem item) {
+        if(item.getTitle().equals("Edit")) {
+            Toast.makeText(context,"Edited",Toast.LENGTH_LONG).show();
+        } else if(item.getTitle().equals("Delete")) {
+            Toast.makeText(context,"Deleted",Toast.LENGTH_LONG).show();
+        }
+    }
+
     static class Holder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         private LinearLayout classes_list;
@@ -81,9 +91,9 @@ public class ClassRecyclerAdapter extends RecyclerView.Adapter<ClassRecyclerAdap
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.setHeaderTitle(R.string.Select_The_Action);
+            menu.setHeaderTitle("Select The Action");
             menu.add(0, v.getId(), 0, "Edit");
-            menu.add(0, v.getId(), 1, "Delete");
+            menu.add(0, v.getId(), 0, "Delete");
         }
     }
 }

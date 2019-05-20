@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -12,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -118,7 +121,7 @@ public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentRecycler
         return  mData.size();
     }
 
-    static class Holder extends RecyclerView.ViewHolder{
+    static class Holder extends RecyclerView.ViewHolder {
 
         private Button addScore;
         private Button subScore;

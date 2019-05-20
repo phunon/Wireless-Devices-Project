@@ -3,10 +3,10 @@
 
     <item
         android:id="@+id/option1"
-        android:title="Option 1"></item>
+        android:title=""></item>
 
     <item
         android:id="@+id/option2"
-        android:title="Option 2"></item>
+        android:title=""></item>
 
 </menu>
