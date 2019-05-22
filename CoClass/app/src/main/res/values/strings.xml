@@ -41,10 +41,10 @@
     <string name="edit_your_id">Edit your ID</string>
     <string name="edit_username">Edit username</string>
     <string name="enter_your_new_username">Enter your new username</string>
-    <string name="disraName">Name: Disra</string>
-    <string name="disraEmail">Email: </string>
+    <string name="disraName">Name: Disra Udomboonyaluck</string>
+    <string name="disraEmail">Email: disra_u@kkumail.com</string>
     <string name="phunonName">Name: Phunon Koysawat</string>
     <string name="phunonEmail">Email: phunon@kkumail.com</string>
-    <string name="marutName">Name: Marut</string>
-    <string name="marutEmail">Email: </string>
+    <string name="marutName">Name: Marut Muengree</string>
+    <string name="marutEmail">Email: marut_m@kkumail.com</string>
 </resources>
