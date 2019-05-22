@@ -6,4 +6,8 @@
         android:title="@string/export_to_json"
         app:showAsAction="never"
     />
+    <item android:id="@+id/open"
+        android:title="Open json"
+        app:showAsAction="never"
+        />
 </menu>

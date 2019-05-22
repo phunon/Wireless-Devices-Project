@@ -47,4 +47,7 @@
     <string name="phunonEmail">Email: phunon@kkumail.com</string>
     <string name="marutName">Name: Marut Muengree</string>
     <string name="marutEmail">Email: marut_m@kkumail.com</string>
+    <string name="enter_your_file_name">Enter your file name</string>
+    <string name="id">ID</string>
+    <string name="score_text">Score</string>
 </resources>
