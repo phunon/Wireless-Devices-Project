@@ -9,12 +9,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/enter_your_new_username"
+        android:text="@string/enter_your_file_name"
         android:textSize="18sp"
         android:gravity="center"/>
 
     <EditText
-        android:id="@+id/edit_user"
+        android:id="@+id/filename"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

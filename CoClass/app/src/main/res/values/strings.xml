@@ -40,12 +40,10 @@
     <string name="edit_your_id">Edit your ID</string>
     <string name="edit_username">Edit username</string>
     <string name="enter_your_new_username">Enter your new username</string>
-    <string name="disraName">Name: Disra</string>
-    <string name="disraEmail">Email: </string>
+    <string name="disraName">Name: Disra Udomboonyaluck</string>
+    <string name="disraEmail">Email: disra_u@kkumail.com</string>
     <string name="phunonName">Name: Phunon Koysawat</string>
     <string name="phunonEmail">Email: phunon@kkumail.com</string>
-    <string name="marutName">Name: Marut</string>
-    <string name="marutEmail">Email: </string>
     <string name="search">Click here to search...</string>
     <string name="TipDeleteCourse">How to Delete Course</string>
     <string name="DeletCourse">Hold click on the name you course that you want to delete. Then the functional menu delete will show so you can delete your course.</string>
@@ -53,4 +51,9 @@
     <string name="WhatIsCC">"The course is the subject that you want to manage and give some score for your student. Class is the subject that you join for study.</string>
     <string name="TipHowtoJoinClass">How to join class</string>
     <string name="HowToJoinClass">Click the floating action button what the plus symbol button then you would click join button and the course code you can get from your teacher.</string>
+    <string name="marutName">Name: Marut Muengree</string>
+    <string name="marutEmail">Email: marut_m@kkumail.com</string>
+    <string name="enter_your_file_name">Enter your file name</string>
+    <string name="id">ID</string>
+    <string name="score_text">Score</string>
 </resources>

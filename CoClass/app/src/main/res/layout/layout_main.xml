@@ -55,4 +55,17 @@
         app:backgroundTint="@color/transparent"
         android:layout_margin="20dp"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/blue_bg"
+            android:scaleType="fitEnd"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>
