@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference dbRef,dbRef2;
     private CircleImageView profileImage;
     private TextView username,email;
+    private ImageView editProfile;
     private FirebaseUser FireUser = auth.getCurrentUser();
     String name = "",sid = "",url = "";
     String cCode;
@@ -310,8 +312,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         profileImage = findViewById(R.id.profileImage);
+        editProfile = findViewById(R.id.edit_profile);
         Picasso.get().load(FireUser.getPhotoUrl()).into(profileImage);
-        profileImage.setOnClickListener(new View.OnClickListener() {
+        editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopupMenu popupMenu = new PopupMenu(getBaseContext(),v);

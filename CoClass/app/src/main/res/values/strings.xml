@@ -30,7 +30,7 @@
     <string name="your_score_is">Your score is</string>
     <string name="score">0</string>
     <string name="help">Help</string>
-    <string name="about">About</string>
+    <string name="about">About us</string>
     <string name="setting">Setting</string>
     <string name="title_activity_about">AboutActivity</string>
     <string name="dummy_button">Dummy Button</string>
@@ -41,4 +41,10 @@
     <string name="edit_your_id">Edit your ID</string>
     <string name="edit_username">Edit username</string>
     <string name="enter_your_new_username">Enter your new username</string>
+    <string name="disraName">Name: Disra</string>
+    <string name="disraEmail">Email: </string>
+    <string name="phunonName">Name: Phunon Koysawat</string>
+    <string name="phunonEmail">Email: phunon@kkumail.com</string>
+    <string name="marutName">Name: Marut</string>
+    <string name="marutEmail">Email: </string>
 </resources>
