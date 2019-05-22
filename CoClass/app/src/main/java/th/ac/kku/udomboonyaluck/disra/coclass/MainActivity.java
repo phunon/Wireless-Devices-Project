@@ -2,6 +2,7 @@ package th.ac.kku.udomboonyaluck.disra.coclass;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String name = "",sid = "",url = "";
     String cCode;
     int numOfStd = 0;
-    Boolean added = false,loadData = true;
+    Boolean added = false,loadData = true, doubleBackToExitPressedOnce = false;
     String cname = "";
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -418,12 +420,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(MainActivity.this, AboutActivity.class));
                 break;
             case R.id.help:
+                startActivity(new Intent(MainActivity.this, HelpActivity.class));
                 break;
             case R.id.setting:
                 break;
             case R.id.sign_out:
-                signOut();
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                signOut();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Sign out?").setMessage("Are you sure you want to sign out?").setPositiveButton("Sign out", dialogClickListener)
+                        .setNegativeButton("Cancel", dialogClickListener).show();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 }
