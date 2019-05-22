@@ -38,4 +38,7 @@
     <string name="teacher_aren_t_called">You have not called the teacher</string>
     <string name="export_to_json">Export to json</string>
     <string name="txt_content">lksajfjlhewlgdaj;fkal; goodlaksfjdsgkjdfkeWNKJBAKJDHFLASJFBDJLFHLKANFJGNSKJVBASK;NFKASJF;AKCALJGNAS;LFO;DGJOS;DJFL;DGNKLSAMG</string>
+    <string name="edit_your_id">Edit your ID</string>
+    <string name="edit_username">Edit username</string>
+    <string name="enter_your_new_username">Enter your new username</string>
 </resources>

@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -202,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     int n = rand.nextInt(str.length());
                                     codeStr += str.charAt(n);
                                 }
-
                                 code.setText(codeStr);
 
                             }
@@ -255,7 +255,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             //if added is true add student else don't added student to course
                                             if ( added ){
                                                 dialog.dismiss();
-                                                url  = FireUser.getPhotoUrl().toString();
+                                               try {
+                                                   url  = FireUser.getPhotoUrl().toString();
+                                               }catch (Exception e){
+                                                   url  = "";
+                                               }
                                                 Student student = new Student(name,sid,0,url);
                                                 final Map<String, Object> studentValues = student.toMap();
                                                 final Map<String, Object> childUpdates = new HashMap<>();
@@ -307,6 +311,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         profileImage = findViewById(R.id.profileImage);
         Picasso.get().load(FireUser.getPhotoUrl()).into(profileImage);
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(getBaseContext(),v);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Button confirm;
+                        switch (item.getItemId()){
+                            case R.id.edit_user :
+                                dialog.setContentView(R.layout.edit_username);
+                                dialog.show();
+
+                                confirm = dialog.findViewById(R.id.confirm);
+
+                                confirm.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        EditText edit_user = dialog.findViewById(R.id.edit_user);
+                                        dbRef = database.getReference("/users/" + FireUser.getUid());
+                                        if(edit_user.getText().toString().equals("") || edit_user.getText().toString().equals(name)){
+                                            Toast.makeText(getBaseContext(),"Please enter your new username",Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            dbRef.child("username").setValue(edit_user.getText().toString());
+                                            dialog.dismiss();
+                                        }
+                                    }
+                                });
+                                break;
+                            case R.id.edit_id :
+                                dialog.setContentView(R.layout.edit_id);
+                                dialog.show();
+
+                                confirm = dialog.findViewById(R.id.confirm);
+
+                                confirm.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        EditText edit_id = dialog.findViewById(R.id.edit_id);
+                                        dbRef = database.getReference("/users/" + FireUser.getUid());
+                                        if(edit_id.getText().toString().equals("") || edit_id.getText().toString().equals(name)){
+                                            Toast.makeText(getBaseContext(),"Please enter your new ID",Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            dbRef.child("id").setValue(edit_id.getText().toString());
+                                            dialog.dismiss();
+                                        }
+                                    }
+                                });
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.inflate(R.menu.edit_profile);
+                popupMenu.show();
+            }
+        });
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);

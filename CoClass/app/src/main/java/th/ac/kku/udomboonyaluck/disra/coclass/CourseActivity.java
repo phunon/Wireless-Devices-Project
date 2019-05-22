@@ -110,19 +110,19 @@ public class CourseActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     int count = 0;
-                                    String jsonStd = "{\"students\":[";
+                                    String jsonStd = "{\"students\":\n[\n";
                                     JSONObject jsonObj = new JSONObject();
                                     for(DataSnapshot snapshot:dataSnapshot.getChildren()){
                                         Student student = snapshot.getValue(Student.class);
                                         assert student != null;
-                                        String jsonString = "{\"student" + count + "\":{\"id\": \"" + student.getId() + "\"," +
-                                                "\"username\":\"" + student.getUsername() + "\"," +
-                                                "\"score\": " + student.getScore() + "}}";
+                                        String jsonString = "{\"student" + count + "\":{\n\"id\": \"" + student.getId() + "\"," +
+                                                "\n\"username\":\"" + student.getUsername() + "\"," +
+                                                "\n\"score\": " + student.getScore() + "\n}\n}";
 
                                         if(count == dataSnapshot.getChildrenCount()-1){
-                                            jsonStd += jsonString + "]";
+                                            jsonStd += jsonString + "\n]";
                                         } else {
-                                            jsonStd += jsonString + ",";
+                                            jsonStd += jsonString + ",\n";
                                         }
                                         count++;
                                     }
