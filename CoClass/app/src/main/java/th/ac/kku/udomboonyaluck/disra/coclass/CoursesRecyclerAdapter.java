@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CoursesRecyclerAdapter extends RecyclerView.Adapter<CoursesRecyclerAdapter.Holder> {
@@ -139,6 +140,11 @@ public class CoursesRecyclerAdapter extends RecyclerView.Adapter<CoursesRecycler
         context.startActivity(intent);
     }
 
+    public void filterList(ArrayList<Course> filteredList) {
+        mData = filteredList;
+        notifyDataSetChanged();
+    }
+
     static class Holder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         private LinearLayout courses_list;
@@ -154,7 +160,6 @@ public class CoursesRecyclerAdapter extends RecyclerView.Adapter<CoursesRecycler
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.setHeaderTitle("Select The Action");
             menu.add(0, v.getId(), 0, "Delete");
         }
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -66,6 +67,27 @@
                 android:background="@color/black"
                 android:layout_gravity="center"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Advertisement"
+                    android:textSize="30sp"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_height="2dp"
+                android:layout_width="match_parent"
+                android:background="@color/grey"
+                android:layout_gravity="center"/>
+
             <Button
                 android:id="@+id/about"
                 android:padding="20dp"
@@ -96,23 +118,6 @@
                 android:background="@color/blue_light"
                 android:drawableLeft="@drawable/help"/>
 
-            <View
-                android:layout_height="2dp"
-                android:layout_width="match_parent"
-                android:background="@color/grey"
-                android:layout_gravity="center"/>
-
-            <Button
-                android:id="@+id/setting"
-                android:padding="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/setting"
-                android:textColor="@color/white"
-                android:textSize="25sp"
-                android:background="@color/blue_light"
-                android:drawableLeft="@drawable/setting"/>
 
             <View
                 android:layout_height="2dp"

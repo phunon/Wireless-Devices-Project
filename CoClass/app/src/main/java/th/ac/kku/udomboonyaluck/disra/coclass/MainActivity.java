@@ -19,6 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 
 import android.view.LayoutInflater;
@@ -59,13 +61,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
-    private Button signOutBtn,aboutBtn,helpBtn,settingBtn;
+    private Button signOutBtn,aboutBtn,helpBtn;
     private FloatingActionButton addCourse;
     private Dialog dialog;
     private FirebaseDatabase database;
     private DatabaseReference dbRef,dbRef2;
     private CircleImageView profileImage;
     private TextView username,email;
+    private EditText search;
     private ImageView editProfile;
     private FirebaseUser FireUser = auth.getCurrentUser();
     String name = "",sid = "",url = "";
@@ -78,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ViewPagerAdapter adapter;
     ArrayList<String> lstcCode;
 
-    ArrayList<String> courseSize;
     ArrayList<Student> lstStudent;
 
     private HTextView txt_info;
@@ -108,11 +110,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         email = findViewById(R.id.showEmail);
         aboutBtn = findViewById(R.id.about);
         helpBtn = findViewById(R.id.help);
-        settingBtn = findViewById(R.id.setting);
         signOutBtn = findViewById(R.id.sign_out);
+        search = findViewById(R.id.search);
         aboutBtn.setOnClickListener(this);
         helpBtn.setOnClickListener(this);
-        settingBtn.setOnClickListener(this);
         signOutBtn.setOnClickListener(this);
 
         //add course
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 lstcCode = new ArrayList<>();
-                for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String code = snapshot.getKey().toString();
                     lstcCode.add(code);
                 }
@@ -149,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dialog.setContentView(R.layout.create_join_course);
                 dialog.show();
 
-                Button create,join;
+                Button create, join;
 
                 create = dialog.findViewById(R.id.create);
                 join = dialog.findViewById(R.id.join);
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         dialog.setContentView(R.layout.create_course);
                         dialog.show();
 
-                        final EditText courseName,code;
+                        final EditText courseName, code;
                         Button confirm;
                         final ImageButton random;
 
@@ -176,15 +177,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 String name = courseName.getText().toString();
                                 cCode = code.getText().toString();
                                 boolean ckcode = true;
-                                for(int i = 0; i< lstcCode.size();i++){
-                                    if(lstcCode.get(i).equals(cCode)){
-                                        Toast.makeText(MainActivity.this,"Code is already exist",Toast.LENGTH_LONG).show();
+                                for (int i = 0; i < lstcCode.size(); i++) {
+                                    if (lstcCode.get(i).equals(cCode)) {
+                                        Toast.makeText(MainActivity.this, "Code is already exist", Toast.LENGTH_LONG).show();
                                         ckcode = false;
                                         break;
                                     }
                                 }
-                                if (ckcode){
-                                    writeNewCourse(FireUser.getUid(),name,cCode);
+                                if (ckcode) {
+                                    writeNewCourse(FireUser.getUid(), name, cCode);
                                     dialog.dismiss();
                                 } else {
                                     ckcode = true;
@@ -201,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 Random rand = new Random();
                                 String codeStr = "";
 
-                                for(int i = 0; i < 6 ; i++){
+                                for (int i = 0; i < 6; i++) {
                                     int n = rand.nextInt(str.length());
                                     codeStr += str.charAt(n);
                                 }
@@ -228,9 +229,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 added = true;
                                 final String cCode = courseCode.getText().toString();
                                 dbRef = database.getReference("");
-                                boolean haveCode = false,checkName = true;
-                                for (int i = 0; i<lstcCode.size() ; i++){
-                                    if (cCode.equals(lstcCode.get(i))){
+                                boolean haveCode = false, checkName = true;
+                                for (int i = 0; i < lstcCode.size(); i++) {
+                                    if (cCode.equals(lstcCode.get(i))) {
                                         haveCode = true;
                                         break;
                                     }
@@ -244,25 +245,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             lstStudent.clear();
-                                            for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                                 Student student = snapshot.getValue(Student.class);
                                                 assert student != null;
                                                 //get list of student for use in a future
                                                 lstStudent.add(student);
-                                                if (name.equals(student.getUsername())){
+                                                if (name.equals(student.getUsername())) {
                                                     added = false;
                                                     break;
                                                 }
                                             }
                                             //if added is true add student else don't added student to course
-                                            if ( added ){
+                                            if (added) {
                                                 dialog.dismiss();
-                                               try {
-                                                   url  = FireUser.getPhotoUrl().toString();
-                                               }catch (Exception e){
-                                                   url  = "";
-                                               }
-                                                Student student = new Student(name,sid,0,url);
+                                                try {
+                                                    url = FireUser.getPhotoUrl().toString();
+                                                } catch (Exception e) {
+                                                    url = "";
+                                                }
+                                                Student student = new Student(name, sid, 0, url);
                                                 final Map<String, Object> studentValues = student.toMap();
                                                 final Map<String, Object> childUpdates = new HashMap<>();
 
@@ -270,18 +271,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                                 childUpdates.put("/courses/" + cCode + "/students/student" + numOfStd, studentValues);
                                                 dbRef = database.getReference("");
                                                 dbRef.updateChildren(childUpdates);
-                                                Log.d("test",url);
+                                                Log.d("test", url);
 
                                                 //get course name / ref for get course name
                                                 dbRef = database.getReference("/courses/");
                                                 dbRef.child(cCode).addValueEventListener(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                        cname = dataSnapshot.getValue(Course.class).getCoursename() +" ";
+                                                        cname = dataSnapshot.getValue(Course.class).getCoursename() + " ";
                                                         //add to classname of user / can't get course name
-                                                        joinClass(FireUser.getUid(),cname,cCode);
+                                                        joinClass(FireUser.getUid(), cname, cCode);
                                                         added = false;
                                                     }
+
                                                     @Override
                                                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -300,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         }
                                     });
                                 } else {
-                                    Toast.makeText(MainActivity.this,"Course doesn't exist.",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MainActivity.this, "Course doesn't exist.", Toast.LENGTH_LONG).show();
                                     haveCode = false;
                                 }
 
@@ -317,13 +319,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(getBaseContext(),v);
+                PopupMenu popupMenu = new PopupMenu(getBaseContext(), v);
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         Button confirm;
-                        switch (item.getItemId()){
-                            case R.id.edit_user :
+                        switch (item.getItemId()) {
+                            case R.id.edit_user:
                                 dialog.setContentView(R.layout.edit_username);
                                 dialog.show();
 
@@ -334,8 +336,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     public void onClick(View v) {
                                         EditText edit_user = dialog.findViewById(R.id.edit_user);
                                         dbRef = database.getReference("/users/" + FireUser.getUid());
-                                        if(edit_user.getText().toString().equals("") || edit_user.getText().toString().equals(name)){
-                                            Toast.makeText(getBaseContext(),"Please enter your new username",Toast.LENGTH_SHORT).show();
+                                        if (edit_user.getText().toString().equals("") || edit_user.getText().toString().equals(name)) {
+                                            Toast.makeText(getBaseContext(), "Please enter your new username", Toast.LENGTH_SHORT).show();
                                         } else {
                                             dbRef.child("username").setValue(edit_user.getText().toString());
                                             dialog.dismiss();
@@ -343,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     }
                                 });
                                 break;
-                            case R.id.edit_id :
+                            case R.id.edit_id:
                                 dialog.setContentView(R.layout.edit_id);
                                 dialog.show();
 
@@ -354,8 +356,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     public void onClick(View v) {
                                         EditText edit_id = dialog.findViewById(R.id.edit_id);
                                         dbRef = database.getReference("/users/" + FireUser.getUid());
-                                        if(edit_id.getText().toString().equals("") || edit_id.getText().toString().equals(name)){
-                                            Toast.makeText(getBaseContext(),"Please enter your new ID",Toast.LENGTH_SHORT).show();
+                                        if (edit_id.getText().toString().equals("") || edit_id.getText().toString().equals(name)) {
+                                            Toast.makeText(getBaseContext(), "Please enter your new ID", Toast.LENGTH_SHORT).show();
                                         } else {
                                             dbRef.child("id").setValue(edit_id.getText().toString());
                                             dialog.dismiss();
@@ -376,8 +378,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         viewPager = findViewById(R.id.viewPager);
 
         // Check dataLoad
-        adapter.AddFragment(new FragmentCourses(),"Course");
-        adapter.AddFragment(new FragmentClasses(),"Class");
+        adapter.AddFragment(new FragmentCourses(), "Course");
+        adapter.AddFragment(new FragmentClasses(), "Class");
 
         viewPager.setAdapter(adapter);
         if (loadData) {
@@ -396,7 +398,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onCancelled(DatabaseError error) {
                     // Failed to read value\
-                    Log.i("Firebase databsae",error.toString());
+                    Log.i("Firebase databsae", error.toString());
                     progressDialog.dismiss();
                 }
             });
@@ -409,16 +411,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txt_info = findViewById(R.id.txt_info);
         txt_info.animateText(arrMessages.get(position));
         handler = new Handler();
-        handler.postDelayed(new Runnable(){
-            public void run(){
+        handler.postDelayed(new Runnable() {
+            public void run() {
                 handler.postDelayed(this, delay);
-                if(position>=arrMessages.size())
-                    position=0;
+                if (position >= arrMessages.size())
+                    position = 0;
                 txt_info.animateText(arrMessages.get(position));
                 position++;
             }
         }, delay);
+
+        //Search
+
+        search.setFocusableInTouchMode(true);
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                FragmentClasses.filter(s.toString());
+                FragmentCourses.filter(s.toString());
+            }
+        });
     }
+
 
     private void joinClass(String uid, String cName, String cCode) {
         final String teacherName = name;
@@ -485,8 +509,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.help:
                 startActivity(new Intent(MainActivity.this, HelpActivity.class));
                 break;
-            case R.id.setting:
-                break;
             case R.id.sign_out:
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
@@ -512,11 +534,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
 

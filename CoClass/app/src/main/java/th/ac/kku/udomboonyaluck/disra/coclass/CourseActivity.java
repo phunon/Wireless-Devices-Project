@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.JsonReader;
 import android.util.Log;
 import android.view.DragAndDropPermissions;
@@ -16,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -43,12 +46,13 @@ public class CourseActivity extends AppCompatActivity {
 
     TextView course_act_name,course_act_teacher;
     ImageView more;
-    private List<Student> lstStudent;
+    private static List<Student> lstStudent;
     private RecyclerView student_list;
     private String code;
     FirebaseDatabase database;
     DatabaseReference dbRef;
     ArrayList<String> lstUrl;
+    static StudentRecyclerAdapter recyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +67,7 @@ public class CourseActivity extends AppCompatActivity {
         more = findViewById(R.id.more);
 
         course_act_name.setText(intent.getStringExtra("courseName"));
-        course_act_teacher.setText(intent.getStringExtra("teacher"));
+        course_act_teacher.setText(intent.getStringExtra("code"));
         code = intent.getStringExtra("code");
 
         database = FirebaseDatabase.getInstance();
@@ -81,7 +85,7 @@ public class CourseActivity extends AppCompatActivity {
                     lstStudent.add(student);
                     assert lstStudent != null;
                     lstUrl.add(snapshot.child("proUrl").getValue().toString());
-                    StudentRecyclerAdapter recyclerViewAdapter = new StudentRecyclerAdapter(CourseActivity.this,lstStudent,code,lstUrl);
+                    recyclerViewAdapter = new StudentRecyclerAdapter(CourseActivity.this,lstStudent,code,lstUrl);
                     student_list.setLayoutManager(new LinearLayoutManager(CourseActivity.this));
                     student_list.setAdapter(recyclerViewAdapter);
                 }

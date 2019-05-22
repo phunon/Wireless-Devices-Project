@@ -7,10 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,13 +30,13 @@ public class FragmentCourses extends Fragment {
 
     View v;
     private RecyclerView myRecyclerView;
-    private List<Course> lstCourses;
+    private static List<Course> lstCourses;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseDatabase database;
     DatabaseReference dbRef;
     FirebaseUser FireUser = auth.getCurrentUser();
     String name = "",sid = "";
-    CoursesRecyclerAdapter recyclerViewAdapter;
+    static CoursesRecyclerAdapter recyclerViewAdapter;
 
     public FragmentCourses(){
     }
@@ -94,5 +97,15 @@ public class FragmentCourses extends Fragment {
         recyclerViewAdapter.getItemSelected(item);
         return super.onContextItemSelected(item);
 
+    }
+    static public void filter (String text) {
+        ArrayList<Course> filteredlist = new ArrayList<>();
+
+        for (Course course : lstCourses) {
+            if (course.getCoursename().toLowerCase().contains(text.toLowerCase())) {
+                filteredlist.add(course);
+            }
+        }
+        recyclerViewAdapter.filterList(filteredlist);
     }
 }

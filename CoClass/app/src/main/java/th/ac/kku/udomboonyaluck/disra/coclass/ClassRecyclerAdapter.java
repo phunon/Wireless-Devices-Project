@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,16 +23,19 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClassRecyclerAdapter extends RecyclerView.Adapter<ClassRecyclerAdapter.Holder> {
 
     private List<Course> mData;
+    private List<Course> data;
     static Context context;
 
     public ClassRecyclerAdapter(Context context, List<Course> mData) {
         this.mData = mData;
         this.context = context;
+        data = new ArrayList<>(mData);
     }
 
     @NonNull
@@ -79,7 +84,12 @@ public class ClassRecyclerAdapter extends RecyclerView.Adapter<ClassRecyclerAdap
         }
     }
 
-    static class Holder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    public void filterList(ArrayList<Course> filterList) {
+        mData = filterList;
+        notifyDataSetChanged();
+    }
+
+    static class Holder extends RecyclerView.ViewHolder {
 
         private LinearLayout classes_list;
         private TextView className;
@@ -87,16 +97,8 @@ public class ClassRecyclerAdapter extends RecyclerView.Adapter<ClassRecyclerAdap
         public Holder(View itemView) {
             super(itemView);
 
-            itemView.setOnCreateContextMenuListener(this);
             classes_list = itemView.findViewById(R.id.classes_list);
             className = itemView.findViewById(R.id.className);
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.setHeaderTitle("Select The Action");
-            menu.add(0, v.getId(), 0, "Edit2");
-            menu.add(0, v.getId(), 0, "Delete2");
         }
     }
 }

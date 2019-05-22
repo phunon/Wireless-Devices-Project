@@ -37,7 +37,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="teacher_aren_t_called">You have not called the teacher</string>
     <string name="export_to_json">Export to json</string>
-    <string name="txt_content">lksajfjlhewlgdaj;fkal; goodlaksfjdsgkjdfkeWNKJBAKJDHFLASJFBDJLFHLKANFJGNSKJVBASK;NFKASJF;AKCALJGNAS;LFO;DGJOS;DJFL;DGNKLSAMG</string>
     <string name="edit_your_id">Edit your ID</string>
     <string name="edit_username">Edit username</string>
     <string name="enter_your_new_username">Enter your new username</string>
@@ -47,4 +46,11 @@
     <string name="phunonEmail">Email: phunon@kkumail.com</string>
     <string name="marutName">Name: Marut</string>
     <string name="marutEmail">Email: </string>
+    <string name="search">Click here to search...</string>
+    <string name="TipDeleteCourse">How to Delete Course</string>
+    <string name="DeletCourse">Hold click on the name you course that you want to delete. Then the functional menu delete will show so you can delete your course.</string>
+    <string name="TipWhatIsCC">What is Course/Class ?</string>
+    <string name="WhatIsCC">"The course is the subject that you want to manage and give some score for your student. Class is the subject that you join for study.</string>
+    <string name="TipHowtoJoinClass">How to join class</string>
+    <string name="HowToJoinClass">Click the floating action button what the plus symbol button then you would click join button and the course code you can get from your teacher.</string>
 </resources>

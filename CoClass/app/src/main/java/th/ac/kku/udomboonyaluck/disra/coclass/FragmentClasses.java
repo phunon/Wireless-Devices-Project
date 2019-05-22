@@ -26,13 +26,13 @@ public class FragmentClasses extends Fragment {
 
     View v;
     private RecyclerView myRecyclerView;
-    private List<Course> lstClasses;
+    static private List<Course> lstClasses;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseDatabase database;
     DatabaseReference dbRef;
     FirebaseUser FireUser = auth.getCurrentUser();
     String name = "",sid = "";
-    ClassRecyclerAdapter recyclerViewAdapter;
+    static ClassRecyclerAdapter recyclerViewAdapter;
 
     public FragmentClasses(){
 
@@ -76,10 +76,14 @@ public class FragmentClasses extends Fragment {
         });
     }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        recyclerViewAdapter.getItemSelected(item);
-        return super.onContextItemSelected(item);
+    static public void filter (String text) {
+        ArrayList<Course> filteredlist = new ArrayList<>();
 
+        for (Course course : lstClasses) {
+            if (course.getCoursename().toLowerCase().contains(text.toLowerCase())) {
+                filteredlist.add(course);
+            }
+        }
+        recyclerViewAdapter.filterList(filteredlist);
     }
 }

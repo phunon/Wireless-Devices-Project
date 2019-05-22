@@ -33,6 +33,7 @@
                 android:textSize="18sp"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/cardview_light_background"/>
+
         </LinearLayout>
 
         <ImageView
@@ -45,6 +46,7 @@
             android:layout_marginTop="16dp"/>
 
     </RelativeLayout>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/student_list"

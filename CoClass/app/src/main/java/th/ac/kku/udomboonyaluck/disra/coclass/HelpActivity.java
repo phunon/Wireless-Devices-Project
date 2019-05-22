@@ -12,23 +12,28 @@ import android.widget.TextView;
 
 public class HelpActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView help1,help2;
-    TextView txt_help1,txt_help2;
-    ImageView arrow1,arrow2;
+    TextView help1,help2,help3;
+    TextView txt_help1,txt_help2,txt_help3;
+    ImageView arrow1,arrow2,arrow3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
         help1 = findViewById(R.id.help1);
         help2 = findViewById(R.id.help2);
+        help2 = findViewById(R.id.help3);
         txt_help1 = findViewById(R.id.txt_help1);
         txt_help2 = findViewById(R.id.txt_help2);
+        txt_help3 = findViewById(R.id.txt_help3);
         arrow1 = findViewById(R.id.arrow1);
         arrow2 = findViewById(R.id.arrow2);
+        arrow3 = findViewById(R.id.arrow3);
         txt_help1.setVisibility(View.GONE);
         txt_help2.setVisibility(View.GONE);
+        txt_help3.setVisibility(View.GONE);
         help1.setOnClickListener(this);
         help2.setOnClickListener(this);
+        help3.setOnClickListener(this);
     }
 
     public void expand(Context context, View v){
@@ -65,6 +70,17 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
                 else{
                     txt_help2.setVisibility(View.VISIBLE);
                     arrow2.setBackground(getResources().getDrawable(R.drawable.up));
+                }
+                break;
+            case R.id.help3:
+                if(txt_help2.isShown()){
+                    expand(this, txt_help3);
+                    txt_help3.setVisibility(View.GONE);
+                    arrow3.setBackground(getResources().getDrawable(R.drawable.down));
+                }
+                else{
+                    txt_help3.setVisibility(View.VISIBLE);
+                    arrow3.setBackground(getResources().getDrawable(R.drawable.up));
                 }
                 break;
         }
