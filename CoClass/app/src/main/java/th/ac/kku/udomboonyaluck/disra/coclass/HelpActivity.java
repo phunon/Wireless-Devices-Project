@@ -21,7 +21,7 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_help);
         help1 = findViewById(R.id.help1);
         help2 = findViewById(R.id.help2);
-        help2 = findViewById(R.id.help3);
+        help3 = findViewById(R.id.help3);
         txt_help1 = findViewById(R.id.txt_help1);
         txt_help2 = findViewById(R.id.txt_help2);
         txt_help3 = findViewById(R.id.txt_help3);
