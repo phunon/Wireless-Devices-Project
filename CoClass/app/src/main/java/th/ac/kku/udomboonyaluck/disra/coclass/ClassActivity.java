@@ -102,7 +102,7 @@ public class ClassActivity extends AppCompatActivity {
                         int queueSize = 0;
 
                         for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-                            String myName = dataSnapshot.child(name).getKey();
+                            String myName = snapshot.child(name).getKey();
                             queueSize++;
                             assert myName != null;
                             if(myName.equals(name)){
