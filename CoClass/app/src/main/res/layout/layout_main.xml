@@ -17,14 +17,11 @@
             android:layout_height="50dp"
             android:hint="@string/search"
             android:gravity="center"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
             android:background="@color/blue_normal"
             android:singleLine="true"/>
 
-        <View
-            android:layout_height="1dp"
-            android:layout_width="match_parent"
-            android:background="@color/grey"
-            android:layout_gravity="center"/>
 
         <android.support.design.widget.TabLayout
             android:layout_width="match_parent"

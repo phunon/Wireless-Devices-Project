@@ -73,7 +73,7 @@ public class HelpActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.help3:
-                if(txt_help2.isShown()){
+                if(txt_help3.isShown()){
                     expand(this, txt_help3);
                     txt_help3.setVisibility(View.GONE);
                     arrow3.setBackground(getResources().getDrawable(R.drawable.down));

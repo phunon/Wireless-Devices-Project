@@ -43,7 +43,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:paddingEnd="10dp"
-                android:text=""
+                android:text="@string/WhatIsCC"
                 android:layout_below="@id/help1"/>
         </RelativeLayout>
 
@@ -79,7 +79,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:paddingEnd="10dp"
-                android:text=""
+                android:text="@string/HowToJoinClass"
                 android:layout_below="@id/help2"/>
         </RelativeLayout>
 
@@ -115,7 +115,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:paddingEnd="10dp"
-                android:text=""
+                android:text="@string/HowToJoinClass"
                 android:layout_below="@id/help3"/>
         </RelativeLayout>
     </LinearLayout>
