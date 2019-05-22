@@ -141,10 +141,22 @@ public class LoginActivity extends AppCompatActivity {
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(pass.getText().toString().equals(rePass.getText().toString())){
-                            createAccount(email.getText().toString().trim(),pass.getText().toString().trim(),username.getText().toString().trim(),id.getText().toString());
-                        } else {
-                            Toast.makeText(LoginActivity.this,"Your Re-Password is not correct.",Toast.LENGTH_SHORT).show();
+                        if (username.getText().toString().trim().equals("")){
+                            username.setError("please enter username");
+                        } else if (id.getText().toString().equals("")){
+                            id.setError("Please enter your ID");
+                        } else if (email.getText().toString().trim().equals("")){
+                            email.setError("please enter E-mail");
+                        } else if (pass.getText().toString().trim().equals("")){
+                            pass.setError("please enter password");
+                        } else   {
+                            if(pass.getText().toString().equals(rePass.getText().toString())){
+                                createAccount(email.getText().toString().trim(),pass.getText().toString().trim(),username.getText().toString().trim(),id.getText().toString());
+                            } else {
+                                pass.setError("Password not match");
+                                rePass.setError("Password not match");
+                                Toast.makeText(LoginActivity.this,"Your Re-Password is not correct.",Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });
@@ -207,16 +219,20 @@ public class LoginActivity extends AppCompatActivity {
                                         yes.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-
-                                                if(username.getText().toString().equals("")){
-                                                    writeNewUser(FireUser.getUid(),FireUser.getDisplayName(),FireUser.getEmail(),id.getText().toString(),FireUser.getPhotoUrl().toString());
+                                                if (id.getText().toString().equals("")){
+                                                    id.setError("Please enter your ID");
                                                 } else {
-                                                    writeNewUser(FireUser.getUid(),username.getText().toString(),FireUser.getEmail(),id.getText().toString(),FireUser.getPhotoUrl().toString());
+                                                    if(username.getText().toString().equals("")){
+                                                        writeNewUser(FireUser.getUid(),FireUser.getDisplayName(),FireUser.getEmail(),id.getText().toString(),FireUser.getPhotoUrl().toString());
+                                                    } else {
+                                                        writeNewUser(FireUser.getUid(),username.getText().toString(),FireUser.getEmail(),id.getText().toString(),FireUser.getPhotoUrl().toString());
+                                                    }
+                                                    dialog.dismiss();
+                                                    finish();
+                                                    startActivity(intent);
                                                 }
 
-                                                dialog.dismiss();
-                                                finish();
-                                                startActivity(intent);
+
                                             }
                                         });
 
@@ -279,7 +295,7 @@ public class LoginActivity extends AppCompatActivity {
                             dialog.dismiss();
                             FireUser = auth.getCurrentUser();
                             assert FireUser != null;
-                            writeNewUser(FireUser.getUid(),username,FireUser.getEmail(),id,FireUser.getPhotoUrl().toString());
+                            writeNewUser(FireUser.getUid(),username,FireUser.getEmail(),id,"");
                             firebaseLogin(email,password);
                         } else {
                             Toast.makeText(LoginActivity.this,"Create Fail!",Toast.LENGTH_SHORT).show();

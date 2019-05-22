@@ -4,14 +4,9 @@ import android.annotation.SuppressLint;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- */
 public class AboutActivity extends AppCompatActivity {
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -37,7 +32,6 @@ public class AboutActivity extends AppCompatActivity {
         @Override
         public void run() {
             // Delayed removal of status and navigation bar
-
             // Note that some of these constants are new as of API 16 (Jelly Bean)
             // and API 19 (KitKat). It is safe to use them, as they are inlined
             // at compile-time and do nothing on earlier devices.
@@ -83,17 +77,14 @@ public class AboutActivity extends AppCompatActivity {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_about);
-
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
-
-
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
