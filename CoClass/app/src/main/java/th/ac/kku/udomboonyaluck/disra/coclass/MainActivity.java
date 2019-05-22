@@ -200,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     int n = rand.nextInt(str.length());
                                     codeStr += str.charAt(n);
                                 }
-
                                 code.setText(codeStr);
 
                             }
@@ -253,7 +252,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                             //if added is true add student else don't added student to course
                                             if ( added ){
                                                 dialog.dismiss();
-                                                url  = FireUser.getPhotoUrl().toString();
+                                               try {
+                                                   url  = FireUser.getPhotoUrl().toString();
+                                               }catch (Exception e){
+                                                   url  = "";
+                                               }
                                                 Student student = new Student(name,sid,0,url);
                                                 final Map<String, Object> studentValues = student.toMap();
                                                 final Map<String, Object> childUpdates = new HashMap<>();
