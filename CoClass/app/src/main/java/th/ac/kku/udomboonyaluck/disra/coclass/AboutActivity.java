@@ -1,7 +1,11 @@
 package th.ac.kku.udomboonyaluck.disra.coclass;
 
+import android.annotation.SuppressLint;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 
 public class AboutActivity extends AppCompatActivity {
     /**
