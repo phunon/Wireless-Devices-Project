@@ -58,7 +58,7 @@ public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentRecycler
     public void onBindViewHolder(@NonNull final StudentRecyclerAdapter.Holder holder, final int position) {
         holder.score_tv.setText("" + mData.get(position).getScore());
         holder.studentName.setText(mData.get(position).getUsername());
-        if(lstUrl.get(position)== ""){
+        if(lstUrl.get(position).equals("")){
             holder.student_img.setImageResource(R.drawable.user_image_default);
         }else {
             try {
@@ -142,7 +142,6 @@ public class StudentRecyclerAdapter extends RecyclerView.Adapter<StudentRecycler
 
         public Holder(@NonNull View itemView) {
             super(itemView);
-
             addScore = itemView.findViewById(R.id.add);
             subScore = itemView.findViewById(R.id.subtract);
             studentName = itemView.findViewById(R.id.studentName);
